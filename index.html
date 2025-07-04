@@ -63,6 +63,21 @@
         .testimonial-card {
              background-color: #FFF7ED; /* orange-50 */
         }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        #form-status.error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-800 */
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -261,7 +276,7 @@
                     <p class="text-gray-600 mt-2">Fill out the form below or contact us via WhatsApp/Call.</p>
                 </div>
                 <div class="max-w-2xl mx-auto">
-                    <form action="#" method="POST" class="space-y-6">
+                    <form id="contact-form" class="space-y-6">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
                             <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
@@ -287,6 +302,7 @@
                             <button type="submit" class="w-full bg-orange-500 text-white px-6 py-3 rounded-full font-semibold cta-button">Send Enquiry</button>
                         </div>
                     </form>
+                    <div id="form-status"></div>
                 </div>
             </div>
         </section>
@@ -348,6 +364,73 @@
         <i class="fab fa-whatsapp text-4xl"></i>
     </a>
 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // IMPORTANT: Add your own Firebase Configuration here
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.firebasestorage.app",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Handle Form Submission
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get form values
+            const name = contactForm.name.value;
+            const email = contactForm.email.value;
+            const service = contactForm.service.value;
+            const message = contactForm.message.value;
+            
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+
+            try {
+                // Add a new document with a generated ID to the "inquiries" collection
+                const docRef = await addDoc(collection(db, "inquiries"), {
+                    name: name,
+                    email: email,
+                    service: service,
+                    message: message,
+                    timestamp: new Date()
+                });
+                console.log("Document written with ID: ", docRef.id);
+                
+                // Show success message
+                formStatus.textContent = 'Thank you! Your message has been sent successfully.';
+                formStatus.className = 'success';
+                formStatus.style.display = 'block';
+
+                contactForm.reset(); // Clear the form
+            } catch (error) {
+                console.error("Error adding document: ", error);
+
+                // Show error message
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'error';
+                formStatus.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Enquiry';
+            }
+        });
+    </script>
+    
     <script>
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
