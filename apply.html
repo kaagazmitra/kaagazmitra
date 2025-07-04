@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Internship – Kaagaz Mitra</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        #form-status.error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        .file-upload-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-upload-button {
+            border: 2px dashed #d1d5db;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-gray-800">
+                Kaagaz<span class="text-orange-500">Mitra</span>
+            </a>
+            <a href="careers.html" class="text-gray-600 hover:text-orange-500 transition">
+                <i class="fas fa-arrow-left mr-2"></i>Back to Careers
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Application Form Section -->
+        <section id="application-form" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="max-w-2xl mx-auto bg-white p-8 md:p-12 rounded-xl shadow-lg">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Apply for Internship</h1>
+                        <p id="role-title" class="text-lg text-orange-600 font-semibold mt-2"></p>
+                    </div>
+                    
+                    <form id="apply-form">
+                        <div class="space-y-6">
+                            <!-- Role (Hidden Input) -->
+                            <input type="hidden" id="role" name="role">
+
+                            <!-- Full Name -->
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" name="name" id="name" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                            </div>
+                            
+                            <!-- Email Address -->
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                                <input type="email" name="email" id="email" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                            </div>
+
+                            <!-- Phone Number -->
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                                <input type="tel" name="phone" id="phone" required class="w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                            </div>
+
+                            <!-- CV / Resume Upload -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Upload CV / Resume</label>
+                                <div class="file-upload-wrapper">
+                                    <div class="file-upload-button text-center text-gray-500 rounded-md">
+                                        <i class="fas fa-cloud-upload-alt text-4xl mb-2"></i>
+                                        <p id="file-name">Click to browse or drag & drop</p>
+                                        <small>(PDF, DOC, DOCX - Max 5MB)</small>
+                                    </div>
+                                    <input type="file" name="resume" id="resume" required accept=".pdf,.doc,.docx">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <button type="submit" class="w-full bg-orange-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-orange-600 transition-colors cta-button">Submit Application</button>
+                        </div>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the role from the URL query parameter and display it
+            const urlParams = new URLSearchParams(window.location.search);
+            const role = urlParams.get('role');
+            const roleTitle = document.getElementById('role-title');
+            const roleInput = document.getElementById('role');
+            if (role) {
+                roleTitle.textContent = `Applying for: ${role}`;
+                roleInput.value = role;
+            } else {
+                roleTitle.textContent = 'General Application';
+                roleInput.value = 'General Application';
+            }
+
+            // Handle file input label
+            const fileInput = document.getElementById('resume');
+            const fileNameDisplay = document.getElementById('file-name');
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    fileNameDisplay.textContent = fileInput.files[0].name;
+                } else {
+                    fileNameDisplay.textContent = 'Click to browse or drag & drop';
+                }
+            });
+
+            // Handle form submission
+            const applyForm = document.getElementById('apply-form');
+            const formStatus = document.getElementById('form-status');
+            
+            applyForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitButton = applyForm.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+                const formData = new FormData();
+                formData.append('name', applyForm.name.value);
+                formData.append('email', applyForm.email.value);
+                formData.append('phone', applyForm.phone.value);
+                formData.append('role', applyForm.role.value);
+                formData.append('resume', applyForm.resume.files[0]);
+
+                // --- Backend Integration Point ---
+                // The following 'fetch' call is a placeholder.
+                // You need to replace 'YOUR_CLOUDFLARE_WORKER_URL' with the actual URL of your Cloudflare Worker.
+                // The worker will be responsible for processing the form data and uploading the file to Google Drive.
+                
+                try {
+                    // const response = await fetch('YOUR_CLOUDFLARE_WORKER_URL', {
+                    //     method: 'POST',
+                    //     body: formData,
+                    // });
+
+                    // if (!response.ok) {
+                    //     throw new Error('Network response was not ok');
+                    // }
+
+                    // const result = await response.json();
+                    
+                    // --- Placeholder for Success ---
+                    // This block simulates a successful submission. Remove it when you implement the backend.
+                    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate network delay
+                    console.log("Simulated submission successful", Object.fromEntries(formData));
+                    // --- End of Placeholder ---
+
+                    formStatus.textContent = 'Thank you! Your application has been submitted successfully.';
+                    formStatus.className = 'success';
+                    formStatus.style.display = 'block';
+                    applyForm.reset();
+                    fileNameDisplay.textContent = 'Click to browse or drag & drop';
+
+                } catch (error) {
+                    console.error('There was an error with the submission:', error);
+                    formStatus.textContent = 'Sorry, there was an error submitting your application. Please try again later.';
+                    formStatus.className = 'error';
+                    formStatus.style.display = 'block';
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = 'Submit Application';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
