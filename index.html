@@ -5,18 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaagaz Mitra – Your Personal Digital Saathi</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -82,7 +78,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <!-- Header & Navigation -->
     <header class="bg-white shadow-md sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="index.html" class="text-2xl font-bold text-gray-800">
@@ -101,7 +96,6 @@
                 </button>
             </div>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
             <a href="#services" class="block py-2 text-gray-600 hover:text-orange-500">Services</a>
             <a href="#about" class="block py-2 text-gray-600 hover:text-orange-500">About Us</a>
@@ -112,7 +106,6 @@
     </header>
 
     <main>
-        <!-- Hero Section -->
         <section class="hero-section py-20 md:py-32">
             <div class="container mx-auto px-6 text-center">
                 <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">Your Personal Digital <span class="text-orange-600">Saathi</span></h1>
@@ -126,7 +119,6 @@
             </div>
         </section>
 
-        <!-- Services Section -->
         <section id="services" class="py-20 bg-white">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
@@ -134,9 +126,7 @@
                     <p class="text-gray-600 mt-2">We simplify your life by managing your paperwork and personal tasks efficiently.</p>
                 </div>
                 
-                <!-- Service Categories -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Government Services -->
                     <div class="service-card bg-white p-8 rounded-lg shadow-lg">
                         <div class="flex items-center mb-4">
                             <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
@@ -153,7 +143,6 @@
                         </ul>
                     </div>
                     
-                    <!-- Business & Compliance -->
                     <div class="service-card bg-white p-8 rounded-lg shadow-lg">
                         <div class="flex items-center mb-4">
                             <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
@@ -170,7 +159,6 @@
                         </ul>
                     </div>
 
-                    <!-- Personal Assistance -->
                     <div class="service-card bg-white p-8 rounded-lg shadow-lg">
                         <div class="flex items-center mb-4">
                             <div class="bg-purple-100 text-purple-600 p-3 rounded-full mr-4">
@@ -190,15 +178,55 @@
             </div>
         </section>
 
-        <!-- About Us Section -->
         <section id="about" class="py-20 bg-gray-50">
             <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                     <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Meet Our Team</h2>
+                </div>
                 <div class="flex flex-col md:flex-row items-center gap-12">
                     <div class="md:w-1/2">
-                        <img src="https://placehold.co/600x400/FED7AA/333333?text=Our+Team" alt="Kaagaz Mitra Team" class="rounded-lg shadow-xl">
+                        <div id="team-slider-container" class="relative w-full max-w-md mx-auto overflow-hidden rounded-lg shadow-xl">
+                            <div id="team-slider" class="flex transition-transform duration-700 ease-in-out">
+                                <div class="w-full flex-shrink-0 relative">
+                                    <img src="https://placehold.co/600x400/fb923c/ffffff?text=Parth+Saini" alt="Parth Saini" class="w-full h-auto object-cover">
+                                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
+                                        <h4 class="font-bold text-lg">PARTH SAINI</h4>
+                                        <p class="text-sm">Founder & CEO</p>
+                                    </div>
+                                </div>
+                                <div class="w-full flex-shrink-0 relative">
+                                    <img src="https://placehold.co/600x400/f97316/ffffff?text=Ashutosh+Birla" alt="Ashutosh Birla" class="w-full h-auto object-cover">
+                                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
+                                        <h4 class="font-bold text-lg">Ashutosh Birla</h4>
+                                        <p class="text-sm">Co-founder & Chief Financial Officer (CFO)</p>
+                                    </div>
+                                </div>
+                                <div class="w-full flex-shrink-0 relative">
+                                    <img src="https://placehold.co/600x400/ea580c/ffffff?text=Jaspreet+Kaur" alt="Jaspreet Kaur" class="w-full h-auto object-cover">
+                                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
+                                        <h4 class="font-bold text-lg">JASPREET KAUR</h4>
+                                        <p class="text-sm">BRAND MANAGER</p>
+                                    </div>
+                                </div>
+                                <div class="w-full flex-shrink-0 relative">
+                                    <img src="https://placehold.co/600x400/d97706/ffffff?text=Mohit+Saini" alt="Mohit Saini" class="w-full h-auto object-cover">
+                                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
+                                        <h4 class="font-bold text-lg">Mohit Saini</h4>
+                                        <p class="text-sm">FIELD & MARKETING COORDINATOR</p>
+                                    </div>
+                                </div>
+                                <div class="w-full flex-shrink-0 relative">
+                                    <img src="https://placehold.co/600x400/b45309/ffffff?text=Shweta+Saini" alt="Shweta Saini" class="w-full h-auto object-cover">
+                                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
+                                        <h4 class="font-bold text-lg">Shweta Saini</h4>
+                                        <p class="text-sm">HUMAN RESOURCE (HR) & CLIENT SERVICES COORDINATOR</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="md:w-1/2">
-                        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">About Kaagaz Mitra</h2>
+                        <h3 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">About Kaagaz Mitra</h3>
                         <p class="text-gray-600 mb-4">
                             Kaagaz Mitra was born from a simple idea: to make life easier for everyone in India. We saw how time-consuming and confusing dealing with paperwork and daily chores can be. Our mission is to provide a reliable, friendly, and digital-first personal assistance service that you can access from the comfort of your home.
                         </p>
@@ -211,7 +239,6 @@
             </div>
         </section>
 
-        <!-- Testimonials Section -->
         <section id="testimonials" class="py-20 bg-white">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
@@ -219,7 +246,6 @@
                     <p class="text-gray-600 mt-2">Here's what our happy customers have to say about us.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Testimonial 1 -->
                     <div class="testimonial-card p-8 rounded-lg border border-orange-200">
                         <div class="text-orange-500 text-5xl mb-4">“</div>
                         <p class="text-gray-700 mb-6">Getting my PAN card was so easy with Kaagaz Mitra. The team was very helpful and did everything for me. Highly recommended!</p>
@@ -231,7 +257,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Testimonial 2 -->
                     <div class="testimonial-card p-8 rounded-lg border border-orange-200">
                         <div class="text-orange-500 text-5xl mb-4">“</div>
                         <p class="text-gray-700 mb-6">I needed to file my GST returns and was very confused. Kaagaz Mitra's team handled it professionally. Great service for small business owners.</p>
@@ -243,7 +268,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Testimonial 3 -->
                     <div class="testimonial-card p-8 rounded-lg border border-orange-200">
                         <div class="text-orange-500 text-5xl mb-4">“</div>
                         <p class="text-gray-700 mb-6">I used their service to send a birthday cake to my mother in another city. It was seamless and she was so happy. Thank you Kaagaz Mitra!</p>
@@ -259,7 +283,6 @@
             </div>
         </section>
 
-        <!-- Partner with Us Section -->
         <section id="partner" class="py-20 bg-orange-500 text-white">
             <div class="container mx-auto px-6 text-center">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4">Join Our Network</h2>
@@ -268,7 +291,6 @@
             </div>
         </section>
 
-        <!-- Contact / Enquiry Form Section -->
         <section id="contact" class="py-20 bg-white">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
@@ -308,7 +330,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-800 text-white">
         <div class="container mx-auto px-6 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -360,17 +381,14 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Floating Action Button -->
     <a href="https://wa.me/917065959669?text=Hi%2C%0AKaagaz%20Mitra%20-%20%22My%20Digital%20Saathi%22.%0AI%20am%20waiting%20for%20your%20response%20.%0AThankyou" target="_blank" class="whatsapp-fab bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
         <i class="fab fa-whatsapp text-4xl"></i>
     </a>
 
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // IMPORTANT: Add your own Firebase Configuration here
         const firebaseConfig = {
             apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
             authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
@@ -380,48 +398,30 @@
             appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Handle Form Submission
         const contactForm = document.getElementById('contact-form');
         const formStatus = document.getElementById('form-status');
 
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Get form values
             const name = contactForm.name.value;
             const email = contactForm.email.value;
             const service = contactForm.service.value;
             const message = contactForm.message.value;
-            
             const submitButton = contactForm.querySelector('button[type="submit"]');
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
-
             try {
-                // Add a new document with a generated ID to the "inquiries" collection
                 const docRef = await addDoc(collection(db, "inquiries"), {
-                    name: name,
-                    email: email,
-                    service: service,
-                    message: message,
-                    timestamp: new Date()
+                    name, email, service, message, timestamp: new Date()
                 });
-                console.log("Document written with ID: ", docRef.id);
-                
-                // Show success message
                 formStatus.textContent = 'Thank you! Your message has been sent successfully.';
                 formStatus.className = 'success';
                 formStatus.style.display = 'block';
-
-                contactForm.reset(); // Clear the form
+                contactForm.reset();
             } catch (error) {
-                console.error("Error adding document: ", error);
-
-                // Show error message
                 formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
                 formStatus.className = 'error';
                 formStatus.style.display = 'block';
@@ -433,30 +433,36 @@
     </script>
     
     <script>
-        // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-
-        // Close mobile menu when a link is clicked
-        const mobileMenuLinks = document.querySelectorAll('#mobile-menu a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
         });
-
-        // Smooth scrolling for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
             });
+        });
+
+        // Team Photo Slider Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.getElementById('team-slider');
+            if (slider) {
+                const slides = slider.children.length;
+                let currentIndex = 0;
+
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % slides;
+                    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                }, 5000); // Change slide every 5 seconds
+            }
         });
     </script>
 </body>
