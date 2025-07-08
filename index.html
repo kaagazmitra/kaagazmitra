@@ -74,6 +74,27 @@
             background-color: #FEE2E2; /* red-100 */
             color: #991B1B; /* red-800 */
         }
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 20;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-button:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -222,8 +243,8 @@
                                 <div class="w-full flex-shrink-0 relative">
                                     <img src="./images/ashutosh-birla.jpg" alt="Ashutosh Birla" class="w-full h-auto object-cover">
                                      <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
-                                        <h4 class="font-bold text-lg">ASHUTOSH BIRLA</h4>
-                                        <p class="text-sm">Co-Founder & Chief Financial Officer (CFO)</p>
+                                        <h4 class="font-bold text-lg">Ashutosh Birla</h4>
+                                        <p class="text-sm">Co-founder & Chief Financial Officer (CFO)</p>
                                     </div>
                                 </div>
                                 <div class="w-full flex-shrink-0 relative">
@@ -236,18 +257,20 @@
                                 <div class="w-full flex-shrink-0 relative">
                                     <img src="./images/mohit-saini.jpg" alt="Mohit Saini" class="w-full h-auto object-cover">
                                      <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
-                                        <h4 class="font-bold text-lg">MOHIT SAINI</h4>
+                                        <h4 class="font-bold text-lg">Mohit Saini</h4>
                                         <p class="text-sm">Co-Founder & Director</p>
                                     </div>
                                 </div>
                                 <div class="w-full flex-shrink-0 relative">
                                     <img src="./images/shweta-saini.jpg" alt="Shweta Saini" class="w-full h-auto object-cover">
                                      <div class="absolute bottom-0 left-0 right-0 p-4 bg-black bg-opacity-60 text-white text-center">
-                                        <h4 class="font-bold text-lg">SHWETA SAINI</h4>
+                                        <h4 class="font-bold text-lg">Shweta Saini</h4>
                                         <p class="text-sm">HUMAN RESOURCE (HR) & CLIENT SERVICES COORDINATOR</p>
                                     </div>
                                 </div>
                             </div>
+                            <button id="prev-button" class="slider-button left-4"><i class="fas fa-chevron-left"></i></button>
+                            <button id="next-button" class="slider-button right-4"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                     <div class="md:w-1/2">
@@ -479,14 +502,49 @@
         // Team Photo Slider Logic
         document.addEventListener('DOMContentLoaded', () => {
             const slider = document.getElementById('team-slider');
+            const prevButton = document.getElementById('prev-button');
+            const nextButton = document.getElementById('next-button');
+            
             if (slider) {
                 const slides = slider.children.length;
                 let currentIndex = 0;
+                let autoSlideInterval;
 
-                setInterval(() => {
-                    currentIndex = (currentIndex + 1) % slides;
-                    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-                }, 5000); // Change slide every 5 seconds
+                function goToSlide(index) {
+                    slider.style.transform = `translateX(-${index * 100}%)`;
+                    currentIndex = index;
+                }
+
+                function nextSlide() {
+                    const newIndex = (currentIndex + 1) % slides;
+                    goToSlide(newIndex);
+                }
+
+                function prevSlide() {
+                    const newIndex = (currentIndex - 1 + slides) % slides;
+                    goToSlide(newIndex);
+                }
+
+                function startAutoSlide() {
+                    autoSlideInterval = setInterval(nextSlide, 5000);
+                }
+
+                function resetAutoSlide() {
+                    clearInterval(autoSlideInterval);
+                    startAutoSlide();
+                }
+
+                nextButton.addEventListener('click', () => {
+                    nextSlide();
+                    resetAutoSlide();
+                });
+
+                prevButton.addEventListener('click', () => {
+                    prevSlide();
+                    resetAutoSlide();
+                });
+
+                startAutoSlide();
             }
         });
     </script>
