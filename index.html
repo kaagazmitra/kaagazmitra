@@ -74,27 +74,6 @@
             background-color: #FEE2E2; /* red-100 */
             color: #991B1B; /* red-800 */
         }
-        .slider-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.3);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 20px;
-            cursor: pointer;
-            z-index: 20;
-            transition: background-color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .slider-button:hover {
-            background-color: rgba(0, 0, 0, 0.6);
-        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -108,7 +87,7 @@
                 <a href="#services" class="text-gray-600 hover:text-orange-500 transition">Services</a>
                 <a href="#about" class="text-gray-600 hover:text-orange-500 transition">About Us</a>
                 <a href="#testimonials" class="text-gray-600 hover:text-orange-500 transition">Testimonials</a>
-                <a href="#partner" class="text-gray-600 hover:text-orange-500 transition">Partner With Us</a>
+                <a href="./blog.html" class="text-gray-600 hover:text-orange-500 transition">Blog</a>
                 <a href="#contact" class="bg-orange-500 text-white px-4 py-2 rounded-full cta-button">Request Service</a>
             </div>
             <div class="md:hidden">
@@ -121,7 +100,7 @@
             <a href="#services" class="block py-2 text-gray-600 hover:text-orange-500">Services</a>
             <a href="#about" class="block py-2 text-gray-600 hover:text-orange-500">About Us</a>
             <a href="#testimonials" class="block py-2 text-gray-600 hover:text-orange-500">Testimonials</a>
-            <a href="#partner" class="block py-2 text-gray-600 hover:text-orange-500">Partner With Us</a>
+            <a href="./blog.html" class="block py-2 text-gray-600 hover:text-orange-500">Blog</a>
             <a href="#contact" class="block mt-2 bg-orange-500 text-white text-center px-4 py-2 rounded-full cta-button">Request Service</a>
         </div>
     </header>
@@ -140,7 +119,6 @@
             </div>
         </section>
 
-        <!-- Book Your Digital Saathi Section -->
         <section id="book-saathi" class="py-16 bg-gray-100">
             <div class="container mx-auto px-6">
                 <a href="https://wa.me/917065959669?text=Hi%20Kaagaz%20Mitra%20Team%2C%0AI%20am%20want%20to%20meet%20my%20Digital%20Saathi%20-%20my%20personal%20assistant%20.%0AWaiting%20for%20your%20reply%20%0AThankyou" target="_blank" class="block relative bg-gradient-to-r from-orange-500 to-amber-500 p-8 md:p-12 rounded-2xl shadow-lg overflow-hidden group">
@@ -151,14 +129,12 @@
                             Book a Consultation
                         </div>
                     </div>
-                    <!-- Interactive Hover Element -->
                     <div class="absolute inset-0 bg-black bg-opacity-80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
                         <div class="text-center text-white p-6">
                             <h3 class="text-2xl font-bold mb-2">Connect with our Experts</h3>
                             <p class="max-w-md mx-auto">Your digital saathi for any industry. Whether it's business, social media, or personal tasks – we have you covered.</p>
                         </div>
                     </div>
-                    <!-- Background decorative elements -->
                     <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full transition-transform duration-500 group-hover:scale-125"></div>
                     <div class="absolute -bottom-12 -left-12 w-40 h-40 bg-white/10 rounded-full transition-transform duration-500 group-hover:scale-125"></div>
                 </a>
@@ -269,8 +245,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <button id="prev-button" class="slider-button left-4"><i class="fas fa-chevron-left"></i></button>
-                            <button id="next-button" class="slider-button right-4"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                     <div class="md:w-1/2">
@@ -391,7 +365,7 @@
                         <li><a href="./index.html#services" class="text-gray-400 hover:text-white">Services</a></li>
                         <li><a href="./index.html#about" class="text-gray-400 hover:text-white">About Us</a></li>
                         <li><a href="./index.html#contact" class="text-gray-400 hover:text-white">Contact</a></li>
-                        <li><a href="https://forms.gle/pPvEFy23MFv7ZX4H6" target="_blank" class="text-gray-400 hover:text-white">Partner With Us</a></li>
+                        <li><a href="./blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
                         <li><a href="./careers.html" class="text-gray-400 hover:text-white">Careers</a></li>
                         <li><a href="./privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
                     </ul>
@@ -502,49 +476,14 @@
         // Team Photo Slider Logic
         document.addEventListener('DOMContentLoaded', () => {
             const slider = document.getElementById('team-slider');
-            const prevButton = document.getElementById('prev-button');
-            const nextButton = document.getElementById('next-button');
-            
             if (slider) {
                 const slides = slider.children.length;
                 let currentIndex = 0;
-                let autoSlideInterval;
 
-                function goToSlide(index) {
-                    slider.style.transform = `translateX(-${index * 100}%)`;
-                    currentIndex = index;
-                }
-
-                function nextSlide() {
-                    const newIndex = (currentIndex + 1) % slides;
-                    goToSlide(newIndex);
-                }
-
-                function prevSlide() {
-                    const newIndex = (currentIndex - 1 + slides) % slides;
-                    goToSlide(newIndex);
-                }
-
-                function startAutoSlide() {
-                    autoSlideInterval = setInterval(nextSlide, 5000);
-                }
-
-                function resetAutoSlide() {
-                    clearInterval(autoSlideInterval);
-                    startAutoSlide();
-                }
-
-                nextButton.addEventListener('click', () => {
-                    nextSlide();
-                    resetAutoSlide();
-                });
-
-                prevButton.addEventListener('click', () => {
-                    prevSlide();
-                    resetAutoSlide();
-                });
-
-                startAutoSlide();
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % slides;
+                    slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+                }, 5000); // Change slide every 5 seconds
             }
         });
     </script>
