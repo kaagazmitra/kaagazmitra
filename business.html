@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaagaz Mitra for Business – Digital Solutions for Your Growth</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-section-business {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8)), url('https://placehold.co/1920x1080/4CAF50/FFFFFF?text=Business+Solutions'); /* Green tint for business */
+            background-size: cover;
+            background-position: center;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            display: block; /* Make the whole card clickable */
+            text-decoration: none; /* Remove underline from link */
+            color: inherit; /* Inherit text color */
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #4CAF50; /* Green-500 */
+        }
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .whatsapp-fab:hover {
+            transform: scale(1.1);
+        }
+        .testimonial-card {
+             background-color: #ECFDF5; /* green-50 */
+        }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        #form-status.error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="./index.html" class="text-2xl font-bold text-gray-800">
+                Kaagaz<span class="text-orange-500">Mitra</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="./index.html" class="text-gray-600 hover:text-orange-500 transition">Back to Home</a>
+                <a href="#contact" class="bg-orange-500 text-white px-4 py-2 rounded-full cta-button">Get a Quote</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="./index.html" class="block py-2 text-gray-600 hover:text-orange-500">Back to Home</a>
+            <a href="#contact" class="block mt-2 bg-orange-500 text-white text-center px-4 py-2 rounded-full cta-button">Get a Quote</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section-business py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">Empowering Your Business with <span class="text-green-600">Seamless Digital Solutions</span></h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">From compliance to digital presence and staffing, Kaagaz Mitra handles your operational complexities so you can focus on growth.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#services-business" class="bg-green-500 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button">Explore Business Services</a>
+                    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Kaagaz%20Mitra%20for%20Business%20services.%0A" target="_blank" class="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Chat with a Business Expert
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="services-business" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Our Comprehensive Business Solutions</h2>
+                    <p class="text-gray-600 mt-2">We provide end-to-end support to streamline your operations and boost your market presence.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Business Setup & Compliance -->
+                    <a href="./business-setup.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-file-invoice fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Business Setup & Compliance</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Navigate regulatory requirements with ease and ensure your business is legally sound.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> GST Registration</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> GST Filing & Returns</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> FSSAI License</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Income Tax Filing (ITR)</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Insurance Services</li>
+                        </ul>
+                    </a>
+                    
+                    <!-- Digital Presence & Marketing -->
+                    <a href="./digital-marketing.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-globe fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Digital Presence & Marketing</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Build a strong online identity and reach your target audience effectively.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Website Development</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Social Media Management</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Lead Generation Strategies</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Digital Marketing Campaigns</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> SEO & Content Optimization</li>
+                        </ul>
+                    </a>
+
+                    <!-- Operations & Staffing -->
+                    <a href="./operations-staffing.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-users-cog fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Operations & Staffing</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Optimize your internal processes and find the right talent for your team.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Worker Provision/Staffing</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Operational Support</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> SIM Card Activations (for business)</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> General Administrative Assistance</li>
+                        </ul>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-choose-us" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Why Businesses Choose Kaagaz Mitra</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-green-200 text-green-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-handshake fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Reliable Partnership</h3>
+                        <p class="text-gray-600">We act as an extension of your team, providing dependable support.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-blue-200 text-blue-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Growth-Oriented Solutions</h3>
+                        <p class="text-gray-600">Our services are designed to help you scale and achieve your business goals.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-orange-200 text-orange-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-hourglass-half fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Time & Cost Efficiency</h3>
+                        <p class="text-gray-600">Save valuable time and resources by outsourcing your administrative and digital needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="business-testimonials" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">What Our Business Clients Say</h2>
+                    <p class="text-gray-600 mt-2">Hear from businesses that have grown with Kaagaz Mitra.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="testimonial-card p-8 rounded-lg border border-green-200">
+                        <div class="text-green-500 text-5xl mb-4">“</div>
+                        <p class="text-gray-700 mb-6">Kaagaz Mitra handled our GST registration and website development flawlessly. Their expertise saved us so much time and hassle. Highly recommend for startups!</p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/50x50/475569/FFFFFF?text=A" class="w-12 h-12 rounded-full mr-4" alt="Ankit Sharma">
+                            <div>
+                                <p class="font-bold text-gray-800">Ankit Sharma</p>
+                                <p class="text-sm text-gray-500">Founder, TechSolutions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card p-8 rounded-lg border border-green-200">
+                        <div class="text-green-500 text-5xl mb-4">“</div>
+                        <p class="text-gray-700 mb-6">Their social media management transformed our online presence. We saw a significant increase in engagement and leads within weeks. A true digital partner!</p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/50x50/475569/FFFFFF?text=P" class="w-12 h-12 rounded-full mr-4" alt="Priya Singh">
+                            <div>
+                                <p class="font-bold text-gray-800">Priya Singh</p>
+                                <p class="text-sm text-gray-500">Marketing Head, RetailCo</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card p-8 rounded-lg border border-green-200">
+                        <div class="text-green-500 text-5xl mb-4">“</div>
+                        <p class="text-gray-700 mb-6">Finding reliable temporary staff was always a challenge until we partnered with Kaagaz Mitra. They provided excellent candidates quickly, allowing us to meet our project deadlines.</p>
+                        <div class="flex items-center">
+                            <img src="https://placehold.co/50x50/475569/FFFFFF?text=V" class="w-12 h-12 rounded-full mr-4" alt="Vikram Reddy">
+                            <div>
+                                <p class="font-bold text-gray-800">Vikram Reddy</p>
+                                <p class="text-sm text-gray-500">Operations Manager, LogiFast</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Ready to Grow Your Business?</h2>
+                    <p class="text-gray-600 mt-2">Fill out the form below to get a free consultation or contact us directly.</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label for="company" class="block text-sm font-medium text-gray-700">Company Name</label>
+                            <input type="text" name="company" id="company" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Business Email Address</label>
+                            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+                            <input type="tel" name="phone" id="phone" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                        </div>
+                        <div>
+                            <label for="service" class="block text-sm font-medium text-gray-700">Service You're Interested In</label>
+                            <select id="service" name="service" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                                <option value="Kaagaz Mitra for Business" selected>Kaagaz Mitra for Business</option>
+                                <option>Website Development</option>
+                                <option>Social Media Management</option>
+                                <option>Lead Generation</option>
+                                <option>Staffing/Worker Provision</option>
+                                <option>Business Setup & Compliance</option>
+                                <option>Marketing Services</option>
+                                <option>Other Business Inquiry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-green-500 text-white px-6 py-3 rounded-full font-semibold cta-button">Submit Inquiry</button>
+                        </div>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Kaagaz<span class="text-orange-400">Mitra</span></h3>
+                    <p class="text-gray-400">Your Digital Partner for Growth.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="./index.html#services" class="text-gray-400 hover:text-white">Main Services</a></li>
+                        <li><a href="#services-business" class="text-gray-400 hover:text-white">Business Services</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="./blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="./careers.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="./privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-400"></i>
+                            <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Kaagaz%20Mitra%20for%20Business%20services.%0A" target="_blank" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-400"></i>
+                            <a href="tel:+917065959669" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <a href="mailto:info@kaagazmitra.com" class="hover:text-white">info@kaagazmitra.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/profile.php?id=61577010855856" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/kaagazmitra" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
+                <p>&copy; 2025 Kaagaz Mitra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Kaagaz%20Mitra%20for%20Business%20services.%0A" target="_blank" class="whatsapp-fab bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.appspot.com",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = contactForm.name.value;
+            const company = contactForm.company.value; // New field
+            const email = contactForm.email.value;
+            const phone = contactForm.phone.value; // New field
+            const service = contactForm.service.value;
+            const message = contactForm.message.value;
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            try {
+                const docRef = await addDoc(collection(db, "businessInquiries"), { // New collection for business inquiries
+                    name, company, email, phone, service, message, timestamp: new Date()
+                });
+                formStatus.textContent = 'Thank you! Your business inquiry has been sent successfully. We will get back to you shortly.';
+                formStatus.className = 'success';
+                formStatus.style.display = 'block';
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error); // Log error for debugging
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'error';
+                formStatus.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Inquiry';
+            }
+        });
+    </script>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

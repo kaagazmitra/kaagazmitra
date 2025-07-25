@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Card Activations (for Business) – Kaagaz Mitra for Business</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-section-sim-card {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8)), url('https://placehold.co/1920x1080/10B981/FFFFFF?text=SIM+Activations'); /* Teal tint for SIM Activations */
+            background-size: cover;
+            background-position: center;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            display: block; /* Make the whole card clickable */
+            text-decoration: none; /* Remove underline from link */
+            color: inherit; /* Inherit text color */
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #10B981; /* Teal-500 */
+        }
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .whatsapp-fab:hover {
+            transform: scale(1.1);
+        }
+        .testimonial-card {
+             background-color: #F0FDF4; /* green-50 */
+        }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        #form-status.error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="./index.html" class="text-2xl font-bold text-gray-800">
+                Kaagaz<span class="text-orange-500">Mitra</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="./operations-staffing.html" class="text-gray-600 hover:text-orange-500 transition">Back to Operations & Staffing</a>
+                <a href="#contact" class="bg-teal-500 text-white px-4 py-2 rounded-full cta-button">Activate SIMs</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="./operations-staffing.html" class="block py-2 text-gray-600 hover:text-orange-500">Back to Operations & Staffing</a>
+            <a href="#contact" class="block mt-2 bg-teal-500 text-white text-center px-4 py-2 rounded-full cta-button">Activate SIMs</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section-sim-card py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">Streamlined <span class="text-teal-600">SIM Card Activations</span> for Your Business</h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">Effortlessly manage bulk SIM activations and documentation for your employees and business operations with Kaagaz Mitra.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#sim-services" class="bg-teal-500 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button">Explore SIM Services</a>
+                    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20SIM%20Card%20Activations%20for%20Business%20services.%0A" target="_blank" class="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Chat with a Connectivity Expert
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="sim-services" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Our SIM Card Activation Services for Businesses</h2>
+                    <p class="text-gray-600 mt-2">Ensuring your team stays connected with hassle-free activations.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Bulk Activations -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-teal-100 text-teal-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-layer-group fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Bulk Activations</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Efficiently activate multiple SIM cards for your entire workforce or new project teams.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Streamlined Process</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Reduced Paperwork</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Dedicated Support</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Documentation Handling -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-file-signature fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Documentation Handling</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">We manage all necessary documentation for SIM card activations, ensuring compliance and accuracy.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Aadhar & PAN Card Verification</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Address Proof Collection</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Digital Submission</li>
+                        </ul>
+                    </div>
+
+                    <!-- Corporate Plans Assistance -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-briefcase fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Corporate Plans Assistance</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Guidance and assistance in selecting and activating the best corporate mobile plans for your business needs.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Plan Comparison</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Feature Analysis</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Activation Support</li>
+                        </ul>
+                    </div>
+
+                    <!-- Post-Activation Support -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-headset fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Post-Activation Support</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Ongoing support for any issues or queries related to your activated SIM cards and services.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Troubleshooting Assistance</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Billing Inquiries</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Service Upgrades/Downgrades</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-choose-us" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Why Choose Kaagaz Mitra for SIM Activations?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-teal-200 text-teal-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Hassle-Free Process</h3>
+                        <p class="text-gray-600">Simplify bulk activations with minimal effort on your part.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-blue-200 text-blue-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Time-Saving</h3>
+                        <p class="text-gray-600">Expedite activations, getting your team connected faster.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-green-200 text-green-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-shield-alt fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Secure & Compliant</h3>
+                        <p class="text-gray-600">Ensure all activations adhere to regulatory requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Get Your Business Connected Today</h2>
+                    <p class="text-gray-600 mt-2">Fill out the form below for a free consultation on your SIM card activation needs.</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="company" class="block text-sm font-medium text-gray-700">Company Name</label>
+                            <input type="text" name="company" id="company" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Business Email Address</label>
+                            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+                            <input type="tel" name="phone" id="phone" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="service" class="block text-sm font-medium text-gray-700">Specific Service Needed</label>
+                            <select id="service" name="service" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                                <option value="SIM Card Activations (for Business)" selected>SIM Card Activations (for Business)</option>
+                                <option>Bulk Activations</option>
+                                <option>Documentation Handling</option>
+                                <option>Corporate Plans Assistance</option>
+                                <option>Post-Activation Support</option>
+                                <option>Other SIM Card Inquiry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-teal-500 text-white px-6 py-3 rounded-full font-semibold cta-button">Submit Inquiry</button>
+                        </div>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Kaagaz<span class="text-orange-400">Mitra</span></h3>
+                    <p class="text-gray-400">Your Digital Partner for Growth.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="./index.html#services" class="text-gray-400 hover:text-white">Main Services</a></li>
+                        <li><a href="./business.html" class="text-gray-400 hover:text-white">Kaagaz Mitra for Business</a></li>
+                        <li><a href="./operations-staffing.html" class="text-gray-400 hover:text-white">Operations & Staffing</a></li>
+                        <li><a href="./worker-provision.html" class="text-gray-400 hover:text-white">Worker Provision / Staffing</a></li>
+                        <li><a href="./operational-support.html" class="text-gray-400 hover:text-white">Operational Support</a></li>
+                        <li><a href="#sim-services" class="text-gray-400 hover:text-white">SIM Card Activations</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="./blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="./careers.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="./privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-400"></i>
+                            <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20SIM%20Card%20Activations%20for%20Business%20services.%0A" target="_blank" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-400"></i>
+                            <a href="tel:+917065959669" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <a href="mailto:info@kaagazmitra.com" class="hover:text-white">info@kaagazmitra.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/profile.php?id=61577010855856" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/kaagazmitra" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
+                <p>&copy; 2025 Kaagaz Mitra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20SIM%20Card%20Activations%20for%20Business%20services.%0A" target="_blank" class="whatsapp-fab bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.appspot.com",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = contactForm.name.value;
+            const company = contactForm.company.value;
+            const email = contactForm.email.value;
+            const phone = contactForm.phone.value;
+            const service = contactForm.service.value;
+            const message = contactForm.message.value;
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            try {
+                const docRef = await addDoc(collection(db, "businessInquiries"), { // Still using businessInquiries collection
+                    name, company, email, phone, service, message, timestamp: new Date()
+                });
+                formStatus.textContent = 'Thank you! Your SIM Card Activations inquiry has been sent successfully. We will get back to you shortly.';
+                formStatus.className = 'success';
+                formStatus.style.display = 'block';
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'error';
+                formStatus.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Inquiry';
+            }
+        });
+    </script>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+```
+I will now develop a new landing page for "Operational Support" and then update the `operations-staffing.html` Canvas to include a link to this new page.
+
+Here is the HTML code for the `operational-support.html` landing page:
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operational Support – Kaagaz Mitra for Business</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-section-ops-support {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8)), url('https://placehold.co/1920x1080/60A5FA/FFFFFF?text=Operational+Support'); /* Blue tint for Operational Support */
+            background-size: cover;
+            background-position: center;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            display: block; /* Make the whole card clickable */
+            text-decoration: none; /* Remove underline from link */
+            color: inherit; /* Inherit text color */
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #60A5FA; /* Blue-400 */
+        }
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .whatsapp-fab:hover {
+            transform: scale(1.1);
+        }
+        .testimonial-card {
+             background-color: #EFF6FF; /* blue-50 */
+        }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        #form-status.error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="./index.html" class="text-2xl font-bold text-gray-800">
+                Kaagaz<span class="text-orange-500">Mitra</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="./operations-staffing.html" class="text-gray-600 hover:text-orange-500 transition">Back to Operations & Staffing</a>
+                <a href="#contact" class="bg-blue-500 text-white px-4 py-2 rounded-full cta-button">Streamline My Ops</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="./operations-staffing.html" class="block py-2 text-gray-600 hover:text-orange-500">Back to Operations & Staffing</a>
+            <a href="#contact" class="block mt-2 bg-blue-500 text-white text-center px-4 py-2 rounded-full cta-button">Streamline My Ops</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section-ops-support py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">Efficient <span class="text-blue-600">Operational Support</span> for Your Business</h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">Offload routine administrative tasks and streamline your workflows, allowing your team to focus on core business activities and strategic growth.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#support-services" class="bg-blue-500 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button">Explore Support Services</a>
+                    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Operational%20Support%20services.%0A" target="_blank" class="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Chat with an Operations Expert
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="support-services" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Our Comprehensive Operational Support</h2>
+                    <p class="text-gray-600 mt-2">Handling your daily tasks efficiently, so you can focus on what matters most.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Data Entry & Management -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-database fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Data Entry & Management</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Accurate and efficient data entry, organization, and maintenance for various business needs.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> CRM Data Entry</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Spreadsheet Management</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Data Cleansing & Validation</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Document Processing -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-file-contract fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Document Processing</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Handling various document-related tasks, from drafting to organization and submission.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Form Filling Assistance</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Document Conversion</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Digital Archiving</li>
+                        </ul>
+                    </div>
+
+                    <!-- Administrative Tasks -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-tasks fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">General Administrative Tasks</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Support for a wide range of daily administrative duties to enhance your business efficiency.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Email Management</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Calendar Scheduling</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Research & Reporting</li>
+                        </ul>
+                    </div>
+
+                    <!-- Vendor Coordination -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 text-purple-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-handshake fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Vendor Coordination</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Streamline communication and management with your various business vendors and partners.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Communication & Follow-up</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Invoice Processing Support</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Relationship Management</li>
+                        </ul>
+                    </div>
+
+                    <!-- Travel & Logistics Support -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 text-red-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-plane-departure fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Travel & Logistics Support</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Assistance with business travel arrangements and logistical coordination for your team.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Flight & Hotel Booking</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Transportation Arrangement</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Event Logistics</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-choose-us" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Why Choose Kaagaz Mitra for Operational Support?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-blue-200 text-blue-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-chart-pie fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Increased Efficiency</h3>
+                        <p class="text-gray-600">Streamline your daily operations and boost productivity.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-green-200 text-green-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-dollar-sign fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Cost Savings</h3>
+                        <p class="text-gray-600">Reduce overheads by outsourcing non-core administrative tasks.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-orange-200 text-orange-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-lightbulb fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Focus on Growth</h3>
+                        <p class="text-gray-600">Free up your internal resources to concentrate on strategic initiatives.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Streamline Your Business Operations Today</h2>
+                    <p class="text-gray-600 mt-2">Fill out the form below for a free consultation on your operational support needs.</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="company" class="block text-sm font-medium text-gray-700">Company Name</label>
+                            <input type="text" name="company" id="company" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Business Email Address</label>
+                            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+                            <input type="tel" name="phone" id="phone" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label for="service" class="block text-sm font-medium text-gray-700">Specific Service Needed</label>
+                            <select id="service" name="service" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="Operational Support" selected>Operational Support</option>
+                                <option>Data Entry & Management</option>
+                                <option>Document Processing</option>
+                                <option>General Administrative Tasks</option>
+                                <option>Vendor Coordination</option>
+                                <option>Travel & Logistics Support</option>
+                                <option>Other Operational Inquiry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-blue-500 text-white px-6 py-3 rounded-full font-semibold cta-button">Submit Inquiry</button>
+                        </div>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Kaagaz<span class="text-orange-400">Mitra</span></h3>
+                    <p class="text-gray-400">Your Digital Partner for Growth.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="./index.html#services" class="text-gray-400 hover:text-white">Main Services</a></li>
+                        <li><a href="./business.html" class="text-gray-400 hover:text-white">Kaagaz Mitra for Business</a></li>
+                        <li><a href="./operations-staffing.html" class="text-gray-400 hover:text-white">Operations & Staffing</a></li>
+                        <li><a href="./worker-provision.html" class="text-gray-400 hover:text-white">Worker Provision / Staffing</a></li>
+                        <li><a href="#support-services" class="text-gray-400 hover:text-white">Operational Support</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="./blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="./careers.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="./privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-400"></i>
+                            <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Operational%20Support%20services.%0A" target="_blank" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-400"></i>
+                            <a href="tel:+917065959669" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <a href="mailto:info@kaagazmitra.com" class="hover:text-white">info@kaagazmitra.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/profile.php?id=61577010855856" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/kaagazmitra" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
+                <p>&copy; 2025 Kaagaz Mitra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Operational%20Support%20services.%0A" target="_blank" class="whatsapp-fab bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.appspot.com",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = contactForm.name.value;
+            const company = contactForm.company.value;
+            const email = contactForm.email.value;
+            const phone = contactForm.phone.value;
+            const service = contactForm.service.value;
+            const message = contactForm.message.value;
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            try {
+                const docRef = await addDoc(collection(db, "businessInquiries"), { // Still using businessInquiries collection
+                    name, company, email, phone, service, message, timestamp: new Date()
+                });
+                formStatus.textContent = 'Thank you! Your Operational Support inquiry has been sent successfully. We will get back to you shortly.';
+                formStatus.className = 'success';
+                formStatus.style.display = 'block';
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'error';
+                formStatus.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Inquiry';
+            }
+        });
+    </script>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

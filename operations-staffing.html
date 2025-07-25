@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operations & Staffing – Kaagaz Mitra for Business</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-section-staffing {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8)), url('https://placehold.co/1920x1080/F97316/FFFFFF?text=Worker+Staffing'); /* Orange tint for staffing */
+            background-size: cover;
+            background-position: center;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            display: block; /* Make the whole card clickable */
+            text-decoration: none; /* Remove underline from link */
+            color: inherit; /* Inherit text color */
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #F97316; /* Orange-500 */
+        }
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .whatsapp-fab:hover {
+            transform: scale(1.1);
+        }
+        .testimonial-card {
+             background-color: #FFF7ED; /* orange-50 */
+        }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        #form-status.error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="./index.html" class="text-2xl font-bold text-gray-800">
+                Kaagaz<span class="text-orange-500">Mitra</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="./operations-staffing.html" class="text-gray-600 hover:text-orange-500 transition">Back to Operations & Staffing</a>
+                <a href="#contact" class="bg-orange-500 text-white px-4 py-2 rounded-full cta-button">Find Workers Now</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="./operations-staffing.html" class="block py-2 text-gray-600 hover:text-orange-500">Back to Operations & Staffing</a>
+            <a href="#contact" class="block mt-2 bg-orange-500 text-white text-center px-4 py-2 rounded-full cta-button">Find Workers Now</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section-staffing py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">Reliable <span class="text-orange-600">Worker Provision & Staffing</span> Solutions</h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">Access a skilled and dependable workforce tailored to your business needs, ensuring seamless operations and project completion.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#staffing-services" class="bg-orange-500 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button">Explore Staffing Options</a>
+                    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Worker%20Provision%20%2F%20Staffing%20services.%0A" target="_blank" class="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Chat with a Staffing Expert
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="staffing-services" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Our Worker Provision & Staffing Services</h2>
+                    <p class="text-gray-600 mt-2">Connecting you with the right talent for every role.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Skilled & Unskilled Labor -->
+                    <a href="./skilled-unskilled-labor.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-hard-hat fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Skilled & Unskilled Labor</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Providing a flexible workforce for various industries and job requirements.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Construction Workers</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Factory Workers</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Event Staff</li>
+                        </ul>
+                    </a>
+                    
+                    <!-- Temporary & Permanent Staffing -->
+                    <a href="./temporary-permanent-staffing.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-clock fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Temporary & Permanent Staffing</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Flexible staffing solutions to meet your short-term projects or long-term growth needs.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Project-Based Staffing</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Direct Hire Placements</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Contract-to-Hire Options</li>
+                        </ul>
+                    </a>
+
+                    <!-- Background Checks & Verification -->
+                    <a href="./background-checks.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-user-check fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Background Checks & Verification</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Ensuring the credibility and reliability of potential hires with thorough background checks.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Criminal Record Checks</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Employment Verification</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Educational Qualification Checks</li>
+                        </ul>
+                    </a>
+
+                    <!-- Payroll Management Support -->
+                    <a href="./payroll-management.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 text-purple-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-money-check-alt fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Payroll Management Support</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Streamline your payroll processes with our efficient and compliant management services.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Salary Processing</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> TDS Deductions</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Compliance Reporting</li>
+                        </ul>
+                    </a>
+
+                    <!-- HR & Administrative Support -->
+                    <a href="./hr-admin-support.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 text-red-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-user-friends fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">HR & Administrative Support</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Comprehensive administrative assistance to support your human resource functions.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Employee Onboarding</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Leave Management</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Policy Documentation</li>
+                        </ul>
+                    </a>
+
+                    <!-- SIM Card Activations -->
+                    <a href="./sim-card-activations.html" class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-teal-100 text-teal-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-sim-card fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">SIM Card Activations (for Business)</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Streamlined process for activating new SIM cards for your business employees or operations.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Bulk Activations</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Documentation Handling</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Corporate Plans Assistance</li>
+                        </ul>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-choose-us" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Why Choose Kaagaz Mitra for Staffing?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-orange-200 text-orange-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-users-line fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Quality Workforce</h3>
+                        <p class="text-gray-600">Access to a pool of reliable and skilled professionals.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-blue-200 text-blue-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-handshake-angle fa-2x"></i> <!-- Font Awesome 6 icon -->
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Flexible Solutions</h3>
+                        <p class="text-gray-600">Tailored staffing options to match your project and business demands.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-green-200 text-green-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-stopwatch fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Time & Cost Savings</h3>
+                        <p class="text-gray-600">Reduce recruitment overheads and operational time with our support.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Find Your Ideal Workforce Today</h2>
+                    <p class="text-gray-600 mt-2">Fill out the form below for a free consultation on your staffing and operational needs.</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label for="company" class="block text-sm font-medium text-gray-700">Company Name</label>
+                            <input type="text" name="company" id="company" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Business Email Address</label>
+                            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+                            <input type="tel" name="phone" id="phone" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                        </div>
+                        <div>
+                            <label for="service" class="block text-sm font-medium text-gray-700">Specific Service Needed</label>
+                            <select id="service" name="service" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                                <option value="Worker Provision / Staffing" selected>Worker Provision / Staffing</option>
+                                <option>Skilled & Unskilled Labor</option>
+                                <option>Temporary & Permanent Staffing</option>
+                                <option>Background Checks & Verification</option>
+                                <option>Payroll Management Support</option>
+                                <option>HR & Administrative Support</option>
+                                <option>Other Staffing Inquiry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-orange-500 text-white px-6 py-3 rounded-full font-semibold cta-button">Submit Inquiry</button>
+                        </div>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Kaagaz<span class="text-orange-400">Mitra</span></h3>
+                    <p class="text-gray-400">Your Digital Partner for Growth.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="./index.html#services" class="text-gray-400 hover:text-white">Main Services</a></li>
+                        <li><a href="./business.html" class="text-gray-400 hover:text-white">Kaagaz Mitra for Business</a></li>
+                        <li><a href="./operations-staffing.html" class="text-gray-400 hover:text-white">Operations & Staffing</a></li>
+                        <li><a href="./worker-provision.html" class="text-gray-400 hover:text-white">Worker Provision / Staffing</a></li>
+                        <li><a href="./operational-support.html" class="text-gray-400 hover:text-white">Operational Support</a></li>
+                        <li><a href="./sim-card-activations.html" class="text-gray-400 hover:text-white">SIM Card Activations</a></li>
+                        <li><a href="./background-checks.html" class="text-gray-400 hover:text-white">Background Checks & Verification</a></li>
+                        <li><a href="./payroll-management.html" class="text-gray-400 hover:text-white">Payroll Management Support</a></li>
+                        <li><a href="./hr-admin-support.html" class="text-gray-400 hover:text-white">HR & Administrative Support</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="./blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="./careers.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="./privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-400"></i>
+                            <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Worker%20Provision%20%2F%20Staffing%20services.%0A" target="_blank" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-400"></i>
+                            <a href="tel:+917065959669" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <a href="mailto:info@kaagazmitra.com" class="hover:text-white">info@kaagazmitra.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/profile.php?id=61577010855856" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/kaagazmitra" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
+                <p>&copy; 2025 Kaagaz Mitra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20Skilled%20%26%20Unskilled%20Labor%20services.%0A" target="_blank" class="whatsapp-fab bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.appspot.com",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = contactForm.name.value;
+            const company = contactForm.company.value;
+            const email = contactForm.email.value;
+            const phone = contactForm.phone.value;
+            const service = contactForm.service.value;
+            const message = contactForm.message.value;
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            try {
+                const docRef = await addDoc(collection(db, "businessInquiries"), { // Still using businessInquiries collection
+                    name, company, email, phone, service, message, timestamp: new Date()
+                });
+                formStatus.textContent = 'Thank you! Your Skilled & Unskilled Labor inquiry has been sent successfully. We will get back to you shortly.';
+                formStatus.className = 'success';
+                formStatus.style.display = 'block';
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'error';
+                formStatus.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Inquiry';
+            }
+        });
+    </script>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

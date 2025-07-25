@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO & Content Optimization – Kaagaz Mitra for Business</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-section-seo {
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8)), url('https://placehold.co/1920x1080/FBBF24/FFFFFF?text=SEO+Content'); /* Amber tint for SEO */
+            background-size: cover;
+            background-position: center;
+        }
+        .cta-button {
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb; /* gray-200 */
+            display: block; /* Make the whole card clickable */
+            text-decoration: none; /* Remove underline from link */
+            color: inherit; /* Inherit text color */
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: #FBBF24; /* Amber-400 */
+        }
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .whatsapp-fab:hover {
+            transform: scale(1.1);
+        }
+        .testimonial-card {
+             background-color: #FFFBEB; /* amber-50 */
+        }
+        #form-status {
+            display: none;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        #form-status.success {
+            background-color: #D1FAE5; /* green-100 */
+            color: #065F46; /* green-800 */
+        }
+        #form-status.error {
+            background-color: #FEE2E2; /* red-100 */
+            color: #991B1B; /* red-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="./index.html" class="text-2xl font-bold text-gray-800">
+                Kaagaz<span class="text-orange-500">Mitra</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="./digital-marketing.html" class="text-gray-600 hover:text-orange-500 transition">Back to Digital Marketing</a>
+                <a href="#contact" class="bg-amber-500 text-white px-4 py-2 rounded-full cta-button">Improve My SEO</a>
+            </div>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="./digital-marketing.html" class="block py-2 text-gray-600 hover:text-orange-500">Back to Digital Marketing</a>
+            <a href="#contact" class="block mt-2 bg-amber-500 text-white text-center px-4 py-2 rounded-full cta-button">Improve My SEO</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section-seo py-20 md:py-32">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-4 leading-tight">Boost Visibility with Expert <span class="text-amber-600">SEO & Content Optimization</span></h1>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto">Rank higher in search results, attract organic traffic, and establish your brand as an industry authority with our comprehensive SEO and content strategies.</p>
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#seo-services" class="bg-amber-500 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button">Explore SEO Services</a>
+                    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20SEO%20%26%20Content%20Optimization%20services.%0A" target="_blank" class="bg-gray-700 text-white px-8 py-3 rounded-full text-lg font-semibold cta-button flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Chat with an SEO Expert
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="seo-services" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Our SEO & Content Optimization Services</h2>
+                    <p class="text-gray-600 mt-2">Driving organic growth and establishing your digital authority.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Keyword Research & Strategy -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-amber-100 text-amber-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-key fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Keyword Research & Strategy</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Identifying high-value keywords to target your ideal audience and dominate search results.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Competitor Keyword Analysis</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Long-Tail Keyword Discovery</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Search Intent Mapping</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- On-Page SEO Optimization -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 text-blue-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-file-code fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">On-Page SEO Optimization</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Optimizing your website's individual pages to rank higher and earn more relevant traffic.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Title Tags & Meta Descriptions</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Header Tag Optimization</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Image Alt Text & Compression</li>
+                        </ul>
+                    </div>
+
+                    <!-- Off-Page SEO & Link Building -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 text-green-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-link fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Off-Page SEO & Link Building</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Building your website's authority and credibility through strategic external linking.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> High-Quality Backlink Acquisition</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Brand Mentions & Citations</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Local SEO Optimization</li>
+                        </ul>
+                    </div>
+
+                    <!-- Content Creation & Optimization -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-100 text-orange-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-pen-nib fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Content Creation & Optimization</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Developing compelling, keyword-rich content that engages your audience and ranks well.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Blog Posts & Articles</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Landing Page Copywriting</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Content Audits & Updates</li>
+                        </ul>
+                    </div>
+
+                    <!-- Technical SEO Audits & Fixes -->
+                    <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 text-red-600 p-3 rounded-full mr-4">
+                               <i class="fas fa-wrench fa-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800">Technical SEO Audits & Fixes</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Ensuring your website's technical foundation is solid for optimal search engine crawling and indexing.</p>
+                        <ul class="space-y-2 text-gray-700">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Site Speed Optimization</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Mobile-Friendliness Checks</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i> Broken Link & Redirect Management</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="why-choose-us" class="py-20 bg-gray-100">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-12">Why Choose Kaagaz Mitra for SEO & Content?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-amber-200 text-amber-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Sustainable Growth</h3>
+                        <p class="text-gray-600">Achieve long-term organic traffic and lead generation.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-blue-200 text-blue-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-bullseye fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Targeted Audience</h3>
+                        <p class="text-gray-600">Attract visitors who are actively searching for your products/services.</p>
+                    </div>
+                    <div class="p-6 bg-white rounded-lg shadow-md flex flex-col items-center">
+                        <div class="bg-green-200 text-green-700 p-4 rounded-full mb-4">
+                            <i class="fas fa-award fa-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Industry Authority</h3>
+                        <p class="text-gray-600">Establish your brand as a trusted leader in your niche.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800">Improve Your Search Rankings Today</h2>
+                    <p class="text-gray-600 mt-2">Fill out the form below for a free consultation on your SEO and content optimization needs.</p>
+                </div>
+                <div class="max-w-2xl mx-auto">
+                    <form id="contact-form" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Your Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="company" class="block text-sm font-medium text-gray-700">Company Name</label>
+                            <input type="text" name="company" id="company" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Business Email Address</label>
+                            <input type="email" name="email" id="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+                            <input type="tel" name="phone" id="phone" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label for="service" class="block text-sm font-medium text-gray-700">Specific Service Needed</label>
+                            <select id="service" name="service" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500">
+                                <option value="SEO & Content Optimization" selected>SEO & Content Optimization</option>
+                                <option>Keyword Research & Strategy</option>
+                                <option>On-Page SEO Optimization</option>
+                                <option>Off-Page SEO & Link Building</option>
+                                <option>Content Creation & Optimization</option>
+                                <option>Technical SEO Audits & Fixes</option>
+                                <option>Other SEO Inquiry</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-amber-500 focus:border-amber-500"></textarea>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-amber-500 text-white px-6 py-3 rounded-full font-semibold cta-button">Submit Inquiry</button>
+                        </div>
+                    </form>
+                    <div id="form-status"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Kaagaz<span class="text-orange-400">Mitra</span></h3>
+                    <p class="text-gray-400">Your Digital Partner for Growth.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="./index.html#services" class="text-gray-400 hover:text-white">Main Services</a></li>
+                        <li><a href="./business.html" class="text-gray-400 hover:text-white">Kaagaz Mitra for Business</a></li>
+                        <li><a href="./digital-marketing.html" class="text-gray-400 hover:text-white">Digital Presence & Marketing</a></li>
+                        <li><a href="./website-development.html" class="text-gray-400 hover:text-white">Website Development</a></li>
+                        <li><a href="./social-media-management.html" class="text-gray-400 hover:text-white">Social Media Management</a></li>
+                        <li><a href="./lead-generation.html" class="text-gray-400 hover:text-white">Lead Generation Strategies</a></li>
+                        <li><a href="./digital-marketing-campaigns.html" class="text-gray-400 hover:text-white">Digital Marketing Campaigns</a></li>
+                        <li><a href="#seo-services" class="text-gray-400 hover:text-white">SEO & Content Optimization</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white">Contact Us</a></li>
+                        <li><a href="./blog.html" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="./careers.html" class="text-gray-400 hover:text-white">Careers</a></li>
+                        <li><a href="./privacy.html" class="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fab fa-whatsapp mr-2 text-green-400"></i>
+                            <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20SEO%20%26%20Content%20Optimization%20services.%0A" target="_blank" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-2 text-orange-400"></i>
+                            <a href="tel:+917065959669" class="hover:text-white">+91 70659 59669</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-2 text-blue-400"></i>
+                            <a href="mailto:info@kaagazmitra.com" class="hover:text-white">info@kaagazmitra.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-lg mb-4">Follow Us</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://www.facebook.com/profile.php?id=61577010855856" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook"></i></a>
+                        <a href="https://x.com/kaagazmitra" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/company/kaagazmitra/" target="_blank" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">
+                <p>&copy; 2025 Kaagaz Mitra. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/917065959669?text=Hi%2C%0AI%20am%20interested%20in%20SEO%20%26%20Content%20Optimization%20services.%0A" target="_blank" class="whatsapp-fab bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg">
+        <i class="fab fa-whatsapp text-4xl"></i>
+    </a>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.appspot.com",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = contactForm.name.value;
+            const company = contactForm.company.value;
+            const email = contactForm.email.value;
+            const phone = contactForm.phone.value;
+            const service = contactForm.service.value;
+            const message = contactForm.message.value;
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            try {
+                const docRef = await addDoc(collection(db, "businessInquiries"), { // Still using businessInquiries collection
+                    name, company, email, phone, service, message, timestamp: new Date()
+                });
+                formStatus.textContent = 'Thank you! Your SEO & Content Optimization inquiry has been sent successfully. We will get back to you shortly.';
+                formStatus.className = 'success';
+                formStatus.style.display = 'block';
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
+                formStatus.className = 'error';
+                formStatus.style.display = 'block';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit Inquiry';
+            }
+        });
+    </script>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
