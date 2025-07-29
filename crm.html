@@ -34,6 +34,35 @@
             font-weight: bold;
             color: white;
         }
+        .ai-chat-window {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            padding: 0.75rem;
+            background-color: #f9fafb;
+        }
+        .ai-chat-bubble {
+            max-width: 80%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .ai-chat-bubble.user {
+            background-color: #3b82f6;
+            color: white;
+            margin-left: auto;
+        }
+        .ai-chat-bubble.assistant {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            margin-right: auto;
+        }
+        .tab-button.active {
+            border-bottom-color: #f97316; /* orange-500 */
+            color: #f97316;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -47,21 +76,11 @@
             </div>
             <div id="auth-error" class="hidden p-3 text-sm text-red-700 bg-red-100 rounded-lg" role="alert"></div>
             <form id="login-form" class="space-y-6">
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input type="email" name="email" id="email" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
-                </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" name="password" id="password" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
-                </div>
-                <div>
-                    <button type="submit" class="w-full bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition hover:bg-orange-600">Sign In</button>
-                </div>
+                <div><label for="email" class="block text-sm font-medium text-gray-700">Email Address</label><input type="email" name="email" id="email" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></div>
+                <div><label for="password" class="block text-sm font-medium text-gray-700">Password</label><input type="password" name="password" id="password" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></div>
+                <div><button type="submit" class="w-full bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition hover:bg-orange-600">Sign In</button></div>
             </form>
-             <p class="text-xs text-center text-gray-500">
-                First time user? Use the credentials provided or contact your administrator to create an account via the Firebase console.
-            </p>
+             <p class="text-xs text-center text-gray-500">First time user? Use the credentials provided or contact your administrator to create an account via the Firebase console.</p>
         </div>
     </div>
 
@@ -70,83 +89,33 @@
         <header class="bg-white shadow-md sticky top-0 z-40">
             <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <h1 class="text-2xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span> CRM</h1>
-                <div>
-                    <span id="user-email" class="text-gray-600 mr-4"></span>
-                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-full transition hover:bg-red-600">Logout</button>
-                </div>
+                <div><span id="user-email" class="text-gray-600 mr-4"></span><button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-full transition hover:bg-red-600">Logout</button></div>
             </nav>
         </header>
-
         <main class="container p-6 mx-auto">
-            <div class="mb-6">
-                <h2 class="text-3xl font-bold text-gray-800">Leads Dashboard</h2>
-                <p class="text-gray-600">Manage all your customer inquiries in one place.</p>
-            </div>
-            
-            <!-- Filters -->
+            <div class="mb-6"><h2 class="text-3xl font-bold text-gray-800">Leads Dashboard</h2><p class="text-gray-600">Manage all your customer inquiries in one place.</p></div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mb-6 bg-white rounded-lg shadow">
-                 <div class="flex-grow">
-                    <label for="category-filter" class="text-sm font-medium text-gray-700">Filter by Category:</label>
-                    <select id="category-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
-                        <option value="all">All Categories</option>
-                        <option value="studentInquiries">Students</option>
-                        <option value="businessInquiries">Business</option>
-                        <option value="individualInquiries">Individuals</option>
-                         <option value="inquiries">General Inquiries</option>
-                    </select>
-                </div>
-                <div class="flex-grow">
-                    <label for="assignee-filter" class="text-sm font-medium text-gray-700">Filter by Assignee:</label>
-                    <select id="assignee-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
-                        <!-- Options populated by JS -->
-                    </select>
-                </div>
-                <div class="flex-grow">
-                    <label for="search-input" class="text-sm font-medium text-gray-700">Search by Name or Email:</label>
-                    <input type="text" id="search-input" placeholder="Search..." class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
-                </div>
+                 <div class="flex-grow"><label for="category-filter" class="text-sm font-medium text-gray-700">Filter by Category:</label><select id="category-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"><option value="all">All Categories</option><option value="studentInquiries">Students</option><option value="businessInquiries">Business</option><option value="individualInquiries">Individuals</option><option value="inquiries">General Inquiries</option></select></div>
+                <div class="flex-grow"><label for="assignee-filter" class="text-sm font-medium text-gray-700">Filter by Assignee:</label><select id="assignee-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></select></div>
+                <div class="flex-grow"><label for="search-input" class="text-sm font-medium text-gray-700">Search by Name or Email:</label><input type="text" id="search-input" placeholder="Search..." class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></div>
             </div>
-
-            <!-- Kanban Board -->
             <div id="kanban-board" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <!-- New Leads Column -->
-                <div id="new" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="New">
-                    <h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-200 pb-2 mb-4">New Leads</h3>
-                    <div class="space-y-4 leads-container"></div>
-                </div>
-                <!-- In Progress Column -->
-                <div id="in-progress" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="In Progress">
-                    <h3 class="text-xl font-bold text-yellow-600 border-b-2 border-yellow-200 pb-2 mb-4">In Progress</h3>
-                    <div class="space-y-4 leads-container"></div>
-                </div>
-                <!-- Completed Column -->
-                <div id="completed" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Completed">
-                    <h3 class="text-xl font-bold text-green-600 border-b-2 border-green-200 pb-2 mb-4">Completed</h3>
-                    <div class="space-y-4 leads-container"></div>
-                </div>
-                <!-- Canceled Column -->
-                <div id="canceled" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Canceled">
-                    <h3 class="text-xl font-bold text-red-600 border-b-2 border-red-200 pb-2 mb-4">Canceled</h3>
-                    <div class="space-y-4 leads-container"></div>
-                </div>
+                <div id="new" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="New"><h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-200 pb-2 mb-4">New Leads</h3><div class="space-y-4 leads-container"></div></div>
+                <div id="in-progress" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="In Progress"><h3 class="text-xl font-bold text-yellow-600 border-b-2 border-yellow-200 pb-2 mb-4">In Progress</h3><div class="space-y-4 leads-container"></div></div>
+                <div id="completed" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Completed"><h3 class="text-xl font-bold text-green-600 border-b-2 border-green-200 pb-2 mb-4">Completed</h3><div class="space-y-4 leads-container"></div></div>
+                <div id="canceled" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Canceled"><h3 class="text-xl font-bold text-red-600 border-b-2 border-red-200 pb-2 mb-4">Canceled</h3><div class="space-y-4 leads-container"></div></div>
             </div>
         </main>
     </div>
     
-    <!-- Lead Details Modal -->
-    <div id="lead-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
-        <div class="relative w-full max-w-2xl p-6 mx-auto my-6 bg-white rounded-lg shadow-2xl modal">
+    <div id="lead-modal" class="fixed inset-0 z-50 items-center justify-center hidden overflow-y-auto modal-backdrop">
+        <div class="relative w-full max-w-4xl p-6 mx-auto my-6 bg-white rounded-lg shadow-2xl modal">
              <button id="close-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-            <div id="modal-content">
-                <!-- Dynamic content will be injected here -->
-            </div>
+            <div id="modal-content"></div>
         </div>
     </div>
 
-
-    <!-- Firebase SDK -->
     <script type="module">
-        // This configuration is taken from your public website files.
         const firebaseConfig = {
             apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
             authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
@@ -156,164 +125,115 @@
             appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
         };
         
-        // Import Firebase services
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            onAuthStateChanged, 
-            signOut 
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            onSnapshot,
-            doc,
-            updateDoc,
-            addDoc,
-            query,
-            orderBy
-        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- Team Configuration ---
-        // You can manage your team members here. The email should match their login email for the CRM.
+        // --- AI & Team Configuration ---
+        // IMPORTANT: API Keys should be kept secure and not exposed on the client-side in a production app.
+        const GEMINI_API_KEY = "AIzaSyDKilOMUJOvDlkBZH35IobuUJBYV8nGw24";
+        const CHATGPT_API_KEY = "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";
+
         const teamMembers = [
             { name: 'Parth Saini', email: 'parth@kaagazmitra.com' },
             { name: 'Ashutosh Birla', email: 'ashutosh@kaagazmitra.com' },
             { name: 'Mohit Saini', email: 'mohit@kaagazmitra.com' },
             { name: 'Jaspreet Kaur', email: 'jaspreet@kaagazmitra.com' },
-            { name: 'Unassigned', email: 'unassigned' } // Do not remove this
+            { name: 'Unassigned', email: 'unassigned' }
         ];
 
-        // DOM Elements
-        const authSection = document.getElementById('auth-section');
-        const crmSection = document.getElementById('crm-section');
-        const loginForm = document.getElementById('login-form');
-        const authError = document.getElementById('auth-error');
-        const logoutButton = document.getElementById('logout-button');
-        const userEmailSpan = document.getElementById('user-email');
-        const kanbanBoard = document.getElementById('kanban-board');
-        const categoryFilter = document.getElementById('category-filter');
-        const assigneeFilter = document.getElementById('assignee-filter');
-        const searchInput = document.getElementById('search-input');
-        const leadModal = document.getElementById('lead-modal');
-        const closeModalButton = document.getElementById('close-modal-button');
-        const modalContent = document.getElementById('modal-content');
+        const dom = {
+            authSection: document.getElementById('auth-section'),
+            crmSection: document.getElementById('crm-section'),
+            loginForm: document.getElementById('login-form'),
+            authError: document.getElementById('auth-error'),
+            logoutButton: document.getElementById('logout-button'),
+            userEmail: document.getElementById('user-email'),
+            categoryFilter: document.getElementById('category-filter'),
+            assigneeFilter: document.getElementById('assignee-filter'),
+            searchInput: document.getElementById('search-input'),
+            leadModal: document.getElementById('lead-modal'),
+            closeModalButton: document.getElementById('close-modal-button'),
+            modalContent: document.getElementById('modal-content')
+        };
 
-        let allLeads = []; // To store all leads from all collections
-        let currentCategory = 'all'; 
-        let currentAssignee = 'all';
-        let currentSearchTerm = '';
+        let allLeads = [], currentCategory = 'all', currentAssignee = 'all', currentSearchTerm = '';
+        let chatGptHistory = [];
 
-        // --- Authentication Logic ---
         onAuthStateChanged(auth, user => {
             if (user) {
-                authSection.classList.add('hidden');
-                crmSection.classList.remove('hidden');
-                userEmailSpan.textContent = user.email;
+                dom.authSection.classList.add('hidden');
+                dom.crmSection.classList.remove('hidden');
+                dom.userEmail.textContent = user.email;
                 initializeCrm();
             } else {
-                authSection.classList.remove('hidden');
-                crmSection.classList.add('hidden');
+                dom.authSection.classList.remove('hidden');
+                dom.crmSection.classList.add('hidden');
                 allLeads = [];
                 renderLeads();
             }
         });
 
-        loginForm.addEventListener('submit', (e) => {
+        dom.loginForm.addEventListener('submit', e => {
             e.preventDefault();
-            const email = loginForm.email.value;
-            const password = loginForm.password.value;
-            
-            signInWithEmailAndPassword(auth, email, password)
+            signInWithEmailAndPassword(auth, dom.loginForm.email.value, dom.loginForm.password.value)
                 .catch(error => {
-                    console.error("Login Error:", error);
-                    authError.textContent = `Error: ${error.message}`;
-                    authError.classList.remove('hidden');
+                    dom.authError.textContent = `Error: ${error.message}`;
+                    dom.authError.classList.remove('hidden');
                 });
         });
 
-        logoutButton.addEventListener('click', () => {
-            signOut(auth).catch(error => console.error("Logout Error:", error));
-        });
+        dom.logoutButton.addEventListener('click', () => signOut(auth));
 
-        // --- CRM Initialization ---
         function initializeCrm() {
             populateAssigneeFilter();
             fetchAllLeads();
         }
 
         function populateAssigneeFilter() {
-            assigneeFilter.innerHTML = '<option value="all">All Team Members</option>';
+            dom.assigneeFilter.innerHTML = '<option value="all">All Team Members</option>';
             teamMembers.forEach(member => {
                 const option = document.createElement('option');
                 option.value = member.email;
                 option.textContent = member.name;
-                assigneeFilter.appendChild(option);
+                dom.assigneeFilter.appendChild(option);
             });
         }
 
-        // --- Firestore & CRM Logic ---
         function fetchAllLeads() {
-            const collectionsToFetch = ['studentInquiries', 'businessInquiries', 'individualInquiries', 'inquiries'];
-            allLeads = []; // Clear previous leads
-            
-            collectionsToFetch.forEach(collectionName => {
-                const leadsCollection = collection(db, collectionName);
-                const q = query(leadsCollection, orderBy("timestamp", "desc"));
-
-                onSnapshot(q, (snapshot) => {
-                    allLeads = allLeads.filter(lead => lead.collectionName !== collectionName);
-                    snapshot.forEach(doc => {
-                        allLeads.push({ 
-                            id: doc.id, 
-                            collectionName: collectionName, 
-                            ...doc.data() 
-                        });
-                    });
+            const collections = ['studentInquiries', 'businessInquiries', 'individualInquiries', 'inquiries'];
+            allLeads = [];
+            collections.forEach(name => {
+                const q = query(collection(db, name), orderBy("timestamp", "desc"));
+                onSnapshot(q, snapshot => {
+                    allLeads = allLeads.filter(lead => lead.collectionName !== name);
+                    snapshot.forEach(doc => allLeads.push({ id: doc.id, collectionName: name, ...doc.data() }));
                     filterAndRenderLeads();
-                }, (error) => {
-                    console.error(`Error fetching ${collectionName}: `, error);
-                });
+                }, err => console.error(`Error fetching ${name}:`, err));
             });
         }
         
         function filterAndRenderLeads() {
-            let filteredLeads = [...allLeads];
-
-            if (currentCategory !== 'all') {
-                filteredLeads = filteredLeads.filter(lead => lead.collectionName === currentCategory);
-            }
-            
-            if (currentAssignee !== 'all') {
-                filteredLeads = filteredLeads.filter(lead => (lead.assignedTo || 'unassigned') === currentAssignee);
-            }
-
+            let leads = allLeads;
+            if (currentCategory !== 'all') leads = leads.filter(l => l.collectionName === currentCategory);
+            if (currentAssignee !== 'all') leads = leads.filter(l => (l.assignedTo || 'unassigned') === currentAssignee);
             if (currentSearchTerm) {
-                const lowercasedTerm = currentSearchTerm.toLowerCase();
-                filteredLeads = filteredLeads.filter(lead => 
-                    (lead.name && lead.name.toLowerCase().includes(lowercasedTerm)) || 
-                    (lead.email && lead.email.toLowerCase().includes(lowercasedTerm))
-                );
+                const term = currentSearchTerm.toLowerCase();
+                leads = leads.filter(l => (l.name && l.name.toLowerCase().includes(term)) || (l.email && l.email.toLowerCase().includes(term)));
             }
-            
-            renderLeads(filteredLeads);
+            renderLeads(leads);
         }
 
-        function renderLeads(leadsToRender = []) {
-            document.querySelectorAll('.leads-container').forEach(container => container.innerHTML = '');
-            leadsToRender.forEach(lead => {
+        function renderLeads(leads = []) {
+            document.querySelectorAll('.leads-container').forEach(c => c.innerHTML = '');
+            leads.forEach(lead => {
                 const status = lead.status || 'New';
                 const column = document.querySelector(`[data-status="${status}"] .leads-container`);
-                if (column) {
-                    const card = createLeadCard(lead);
-                    column.appendChild(card);
-                }
+                if (column) column.appendChild(createLeadCard(lead));
             });
             setupDragAndDrop();
         }
@@ -321,10 +241,7 @@
         function getInitials(name = '') {
             if (!name || name === 'Unassigned') return 'U';
             const parts = name.split(' ');
-            if (parts.length > 1) {
-                return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-            }
-            return name.substring(0, 2).toUpperCase();
+            return parts.length > 1 ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase() : name.substring(0, 2).toUpperCase();
         }
         
         function createLeadCard(lead) {
@@ -333,248 +250,262 @@
             card.draggable = true;
             card.dataset.id = lead.id;
             card.dataset.collection = lead.collectionName;
-
-            const categoryColors = {
-                studentInquiries: 'bg-blue-100 text-blue-800',
-                businessInquiries: 'bg-green-100 text-green-800',
-                individualInquiries: 'bg-purple-100 text-purple-800',
-                inquiries: 'bg-gray-200 text-gray-800'
-            };
             
-            const categoryNames = {
-                studentInquiries: 'Student',
-                businessInquiries: 'Business',
-                individualInquiries: 'Individual',
-                inquiries: 'General'
+            const categoryInfo = {
+                studentInquiries: { name: 'Student', color: 'bg-blue-100 text-blue-800' },
+                businessInquiries: { name: 'Business', color: 'bg-green-100 text-green-800' },
+                individualInquiries: { name: 'Individual', color: 'bg-purple-100 text-purple-800' },
+                inquiries: { name: 'General', color: 'bg-gray-200 text-gray-800' }
             };
+            const cat = categoryInfo[lead.collectionName] || { name: 'Unknown', color: 'bg-gray-100' };
             
-            const assignedToEmail = lead.assignedTo || 'unassigned';
-            const assignee = teamMembers.find(m => m.email === assignedToEmail) || teamMembers.find(m => m.email === 'unassigned');
+            const assignee = teamMembers.find(m => m.email === (lead.assignedTo || 'unassigned')) || teamMembers.find(m => m.email === 'unassigned');
             const assigneeInitials = getInitials(assignee.name);
             const assigneeColor = assignee.email === 'unassigned' ? 'bg-gray-400' : 'bg-indigo-500';
 
             card.innerHTML = `
-                <div class="flex justify-between items-start">
-                    <h4 class="font-bold text-gray-900">${lead.name || 'N/A'}</h4>
-                    <span class="text-xs font-semibold px-2 py-1 rounded-full ${categoryColors[lead.collectionName] || 'bg-gray-100'}">
-                        ${categoryNames[lead.collectionName] || 'Unknown'}
-                    </span>
-                </div>
+                <div class="flex justify-between items-start"><h4 class="font-bold text-gray-900">${lead.name || 'N/A'}</h4><span class="text-xs font-semibold px-2 py-1 rounded-full ${cat.color}">${cat.name}</span></div>
                 <p class="text-sm text-gray-600">${lead.email || 'No email'}</p>
                 <p class="mt-2 text-sm text-gray-500 truncate">${lead.service || lead.message}</p>
                 <div class="flex items-center justify-between mt-3">
-                    <div class="text-xs text-gray-400">
-                        <span>${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span>
-                    </div>
-                    <div class="assignee-avatar ${assigneeColor}" title="Assigned to: ${assignee.name}">
-                        ${assigneeInitials}
-                    </div>
-                </div>
-            `;
-
+                    <div class="text-xs text-gray-400"><span>${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span></div>
+                    <div class="assignee-avatar ${assigneeColor}" title="Assigned to: ${assignee.name}">${assigneeInitials}</div>
+                </div>`;
             card.addEventListener('click', () => openLeadModal(lead));
             return card;
         }
         
-        // --- Drag and Drop Logic ---
         function setupDragAndDrop() {
             const cards = document.querySelectorAll('.kanban-card');
             const columns = document.querySelectorAll('.kanban-column');
             let draggedCard = null;
-
             cards.forEach(card => {
-                card.addEventListener('dragstart', () => {
-                    draggedCard = card;
-                    setTimeout(() => card.classList.add('dragging'), 0);
-                });
-                card.addEventListener('dragend', () => {
-                    draggedCard.classList.remove('dragging');
-                    draggedCard = null;
-                });
+                card.addEventListener('dragstart', () => { draggedCard = card; setTimeout(() => card.classList.add('dragging'), 0); });
+                card.addEventListener('dragend', () => { draggedCard.classList.remove('dragging'); draggedCard = null; });
             });
-
             columns.forEach(column => {
-                column.addEventListener('dragover', e => {
-                    e.preventDefault();
-                    const afterElement = getDragAfterElement(column, e.clientY);
-                    const container = column.querySelector('.leads-container');
-                    if (afterElement == null) {
-                        container.appendChild(draggedCard);
-                    } else {
-                        container.insertBefore(draggedCard, afterElement);
-                    }
-                });
+                column.addEventListener('dragover', e => { e.preventDefault(); });
                 column.addEventListener('drop', e => {
                     e.preventDefault();
-                    const newStatus = column.dataset.status;
-                    const leadId = draggedCard.dataset.id;
-                    const collectionName = draggedCard.dataset.collection;
-                    updateLeadField(collectionName, leadId, { status: newStatus });
+                    const container = column.querySelector('.leads-container');
+                    container.appendChild(draggedCard);
+                    updateLeadField(draggedCard.dataset.collection, draggedCard.dataset.id, { status: column.dataset.status });
                 });
             });
         }
-        
-        function getDragAfterElement(column, y) {
-            const draggableElements = [...column.querySelectorAll('.kanban-card:not(.dragging)')];
-            return draggableElements.reduce((closest, child) => {
-                const box = child.getBoundingClientRect();
-                const offset = y - box.top - box.height / 2;
-                if (offset < 0 && offset > closest.offset) {
-                    return { offset: offset, element: child };
-                } else {
-                    return closest;
-                }
-            }, { offset: Number.NEGATIVE_INFINITY }).element;
-        }
 
-        // Generic function to update any field for a lead
         async function updateLeadField(collectionName, leadId, dataToUpdate) {
             const leadRef = doc(db, collectionName, leadId);
             try {
                 await updateDoc(leadRef, dataToUpdate);
                 const leadIndex = allLeads.findIndex(l => l.id === leadId && l.collectionName === collectionName);
-                if (leadIndex > -1) {
-                    Object.assign(allLeads[leadIndex], dataToUpdate);
-                }
-                console.log(`Lead ${leadId} updated:`, dataToUpdate);
-                filterAndRenderLeads(); // Re-render to reflect changes immediately
+                if (leadIndex > -1) Object.assign(allLeads[leadIndex], dataToUpdate);
+                filterAndRenderLeads();
             } catch (error) {
                 console.error("Error updating lead: ", error);
-                filterAndRenderLeads(); // Re-render to revert visual change on error
+                filterAndRenderLeads();
             }
         }
         
-        // --- Modal Logic ---
         function openLeadModal(lead) {
-            const assignedToEmail = lead.assignedTo || 'unassigned';
-            
-            modalContent.innerHTML = `
+            dom.modalContent.innerHTML = `
                 <h3 class="text-2xl font-bold mb-4">${lead.name}</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Left Column: Details -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="space-y-4 text-gray-700">
                         <p><strong>Email:</strong> <a href="mailto:${lead.email}" class="text-blue-600 hover:underline">${lead.email}</a></p>
                         <p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p>
                         <p><strong>Category:</strong> ${lead.collectionName}</p>
                         <p><strong>Service of Interest:</strong> ${lead.service || 'N/A'}</p>
                         <p><strong>Submitted on:</strong> ${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</p>
-                        <div class="p-3 bg-gray-50 rounded-md border">
-                            <p class="font-semibold">Message:</p>
-                            <p>${lead.message || 'No message provided.'}</p>
-                        </div>
+                        <div class="p-3 bg-gray-50 rounded-md border"><p class="font-semibold">Message:</p><p>${lead.message || 'No message provided.'}</p></div>
+                        <div><label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label><select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">${teamMembers.map(m => `<option value="${m.email}" ${(lead.assignedTo || 'unassigned') === m.email ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
                     </div>
-                    <!-- Right Column: Actions & Notes -->
-                    <div class="space-y-4">
-                        <div>
-                            <label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label>
-                            <select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">
-                                ${teamMembers.map(member => `<option value="${member.email}" ${assignedToEmail === member.email ? 'selected' : ''}>${member.name}</option>`).join('')}
-                            </select>
-                        </div>
-                        <div class="mt-6">
-                            <h4 class="font-bold text-lg mb-2">Notes</h4>
-                            <div id="notes-container" class="space-y-2 mb-4 max-h-40 overflow-y-auto p-2 bg-gray-50 border rounded-md">
-                               <!-- Notes will be loaded here -->
-                            </div>
-                            <form id="add-note-form">
-                                <textarea id="note-input" rows="3" placeholder="Add a new note..." class="w-full p-2 border rounded-md focus:ring-orange-500 focus:border-orange-500"></textarea>
-                                <button type="submit" class="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Add Note</button>
-                            </form>
-                        </div>
+                    <div>
+                        <div class="border-b border-gray-200 mb-4"><nav class="-mb-px flex space-x-6" id="modal-tabs"></nav></div>
+                        <div id="modal-tab-content"></div>
                     </div>
-                </div>
-            `;
-            leadModal.classList.remove('hidden');
-            leadModal.classList.add('flex');
+                </div>`;
             
-            loadNotes(lead.collectionName, lead.id);
+            setupModalTabs(lead);
+            dom.leadModal.classList.remove('hidden');
+            dom.leadModal.classList.add('flex');
 
-            document.getElementById('add-note-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const noteInput = document.getElementById('note-input');
-                const noteText = noteInput.value.trim();
-                if (noteText) {
-                    addNote(lead.collectionName, lead.id, noteText);
-                    noteInput.value = '';
-                }
-            });
-
-            document.getElementById('assign-lead').addEventListener('change', (e) => {
-                const newAssigneeEmail = e.target.value;
-                updateLeadField(lead.collectionName, lead.id, { assignedTo: newAssigneeEmail });
-            });
+            document.getElementById('assign-lead').addEventListener('change', e => updateLeadField(lead.collectionName, lead.id, { assignedTo: e.target.value }));
         }
 
-        function closeModal() {
-            leadModal.classList.add('hidden');
-            leadModal.classList.remove('flex');
-            modalContent.innerHTML = '';
-        }
-        
-        // --- Notes Functionality ---
-        async function addNote(collectionName, leadId, text) {
-            const notesCollectionRef = collection(db, collectionName, leadId, 'notes');
-            try {
-                await addDoc(notesCollectionRef, {
-                    text: text,
-                    timestamp: new Date(),
-                    author: auth.currentUser.email
+        function setupModalTabs(lead) {
+            const tabsContainer = document.getElementById('modal-tabs');
+            const tabContentContainer = document.getElementById('modal-tab-content');
+            const tabs = [
+                { name: 'Notes', content: getNotesContent(lead) },
+                { name: 'Customer Reply (Gemini)', content: getGeminiContent() },
+                { name: 'Team Assistant (ChatGPT)', content: getChatGPTContent() }
+            ];
+
+            tabsContainer.innerHTML = '';
+            tabs.forEach((tab, index) => {
+                const button = document.createElement('button');
+                button.textContent = tab.name;
+                button.className = `whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 tab-button ${index === 0 ? 'active' : ''}`;
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    tabContentContainer.innerHTML = tab.content;
+                    activateTabContent(tab.name, lead);
                 });
-            } catch (error) {
-                console.error("Error adding note: ", error);
-            }
+                tabsContainer.appendChild(button);
+            });
+            
+            // Load initial tab content
+            tabContentContainer.innerHTML = tabs[0].content;
+            activateTabContent(tabs[0].name, lead);
         }
 
+        function activateTabContent(tabName, lead) {
+            if (tabName === 'Notes') loadNotes(lead.collectionName, lead.id);
+            if (tabName === 'Customer Reply (Gemini)') setupGeminiAssistant(lead);
+            if (tabName === 'Team Assistant (ChatGPT)') setupChatGPTAssistant(lead);
+        }
+
+        // --- Notes Section ---
+        function getNotesContent(lead) {
+            return `
+                <h4 class="font-bold text-lg mb-2">Notes</h4>
+                <div id="notes-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 border rounded-md"></div>
+                <form id="add-note-form">
+                    <textarea id="note-input" rows="3" placeholder="Add a new note..." class="w-full p-2 border rounded-md focus:ring-orange-500 focus:border-orange-500"></textarea>
+                    <button type="submit" class="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Add Note</button>
+                </form>`;
+        }
         function loadNotes(collectionName, leadId) {
             const notesContainer = document.getElementById('notes-container');
-            notesContainer.innerHTML = '<p>Loading notes...</p>';
-            const notesCollectionRef = collection(db, collectionName, leadId, 'notes');
-            const q = query(notesCollectionRef, orderBy("timestamp", "desc"));
-
-            onSnapshot(q, (snapshot) => {
-                if (snapshot.empty) {
-                    notesContainer.innerHTML = '<p class="text-gray-500">No notes yet.</p>';
-                    return;
-                }
+            const q = query(collection(db, collectionName, leadId, 'notes'), orderBy("timestamp", "desc"));
+            onSnapshot(q, snapshot => {
+                if (snapshot.empty) { notesContainer.innerHTML = '<p class="text-gray-500">No notes yet.</p>'; return; }
                 notesContainer.innerHTML = '';
                 snapshot.forEach(doc => {
                     const note = doc.data();
-                    const noteElement = document.createElement('div');
-                    noteElement.className = 'p-3 bg-white border rounded-md text-sm';
-                    noteElement.innerHTML = `
-                        <p>${note.text}</p>
-                        <p class="text-xs text-gray-400 mt-1">
-                            By ${note.author} on ${new Date(note.timestamp.seconds * 1000).toLocaleString()}
-                        </p>
-                    `;
-                    notesContainer.appendChild(noteElement);
+                    const noteEl = document.createElement('div');
+                    noteEl.className = 'p-3 bg-white border rounded-md text-sm';
+                    noteEl.innerHTML = `<p>${note.text}</p><p class="text-xs text-gray-400 mt-1">By ${note.author} on ${new Date(note.timestamp.seconds * 1000).toLocaleString()}</p>`;
+                    notesContainer.appendChild(noteEl);
                 });
+            });
+            document.getElementById('add-note-form').addEventListener('submit', e => {
+                e.preventDefault();
+                const noteInput = document.getElementById('note-input');
+                if (noteInput.value.trim()) {
+                    addNote(collectionName, leadId, noteInput.value.trim());
+                    noteInput.value = '';
+                }
+            });
+        }
+        async function addNote(collectionName, leadId, text) {
+            const notesRef = collection(db, collectionName, leadId, 'notes');
+            await addDoc(notesRef, { text, timestamp: new Date(), author: auth.currentUser.email });
+        }
+
+        // --- Gemini Assistant ---
+        function getGeminiContent() {
+            return `
+                <h4 class="font-bold text-lg mb-2">Draft a Customer Reply</h4>
+                <button id="draft-gemini-reply" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mb-4">Draft Reply Email</button>
+                <textarea id="gemini-output" rows="8" class="w-full p-2 border rounded-md bg-gray-50" placeholder="AI-generated email draft will appear here..."></textarea>
+                <button id="copy-gemini-reply" class="mt-2 bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Copy Text</button>`;
+        }
+        function setupGeminiAssistant(lead) {
+            document.getElementById('draft-gemini-reply').addEventListener('click', async (e) => {
+                e.target.disabled = true;
+                e.target.textContent = 'Drafting...';
+                const prompt = `You are a helpful assistant for a company named "Kaagaz Mitra". A customer named "${lead.name}" has contacted us. Their message is: "${lead.message}". They are interested in the service: "${lead.service}". Draft a professional and friendly email reply to them. Address them by name, acknowledge their query, provide a brief, reassuring next step, and sign off from the "Kaagaz Mitra Team".`;
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+                    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                    const data = await response.json();
+                    const outputArea = document.getElementById('gemini-output');
+                    outputArea.value = data.candidates[0].content.parts[0].text;
+                } catch (error) {
+                    document.getElementById('gemini-output').value = `Error: Could not generate reply. ${error.message}`;
+                } finally {
+                    e.target.disabled = false;
+                    e.target.textContent = 'Draft Reply Email';
+                }
+            });
+            document.getElementById('copy-gemini-reply').addEventListener('click', () => {
+                const outputArea = document.getElementById('gemini-output');
+                outputArea.select();
+                document.execCommand('copy');
             });
         }
 
-        // --- Event Listeners ---
-        categoryFilter.addEventListener('change', (e) => {
-            currentCategory = e.target.value;
-            filterAndRenderLeads();
-        });
-        
-        assigneeFilter.addEventListener('change', (e) => {
-            currentAssignee = e.target.value;
-            filterAndRenderLeads();
-        });
+        // --- ChatGPT Assistant ---
+        function getChatGPTContent() {
+            return `
+                <h4 class="font-bold text-lg mb-2">Internal Team Assistant</h4>
+                <div id="chatgpt-window" class="ai-chat-window mb-2"></div>
+                <form id="chatgpt-form" class="flex space-x-2">
+                    <input type="text" id="chatgpt-input" class="flex-grow p-2 border rounded-md" placeholder="Ask a question about this lead...">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Send</button>
+                </form>`;
+        }
+        function setupChatGPTAssistant(lead) {
+            const chatWindow = document.getElementById('chatgpt-window');
+            const chatForm = document.getElementById('chatgpt-form');
+            const chatInput = document.getElementById('chatgpt-input');
+            
+            const leadContext = `CONTEXT: You are an internal assistant for the Kaagaz Mitra team. You are helping a team member with a lead. Lead Name: ${lead.name}. Lead Email: ${lead.email}. Lead Message: "${lead.message}". Service of Interest: "${lead.service}".`;
+            chatGptHistory = [{ role: 'system', content: leadContext }];
+            
+            chatForm.addEventListener('submit', async e => {
+                e.preventDefault();
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
 
-        searchInput.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value;
-            filterAndRenderLeads();
-        });
-        
-        closeModalButton.addEventListener('click', closeModal);
-        leadModal.addEventListener('click', (e) => {
-            if (e.target === leadModal) {
-                closeModal();
-            }
-        });
+                addMessageToChat('user', userMessage);
+                chatInput.value = '';
+                chatGptHistory.push({ role: 'user', content: userMessage });
 
+                try {
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${CHATGPT_API_KEY}` },
+                        body: JSON.stringify({ model: 'gpt-3.5-turbo', messages: chatGptHistory })
+                    });
+                    if (!response.ok) throw new Error(`API Error: ${response.statusText}`);
+                    const data = await response.json();
+                    const assistantMessage = data.choices[0].message.content;
+                    addMessageToChat('assistant', assistantMessage);
+                    chatGptHistory.push({ role: 'assistant', content: assistantMessage });
+                } catch (error) {
+                    addMessageToChat('assistant', `Error: Could not get response. ${error.message}`);
+                }
+            });
+        }
+        function addMessageToChat(role, text) {
+            const chatWindow = document.getElementById('chatgpt-window');
+            const bubble = document.createElement('div');
+            bubble.className = `ai-chat-bubble ${role}`;
+            bubble.textContent = text;
+            chatWindow.appendChild(bubble);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        function closeModal() {
+            dom.leadModal.classList.add('hidden');
+            dom.leadModal.classList.remove('flex');
+            dom.modalContent.innerHTML = '';
+        }
+        
+        dom.closeModalButton.addEventListener('click', closeModal);
+        dom.leadModal.addEventListener('click', e => { if (e.target === dom.leadModal) closeModal(); });
+        dom.categoryFilter.addEventListener('change', e => { currentCategory = e.target.value; filterAndRenderLeads(); });
+        dom.assigneeFilter.addEventListener('change', e => { currentAssignee = e.target.value; filterAndRenderLeads(); });
+        dom.searchInput.addEventListener('input', e => { currentSearchTerm = e.target.value; filterAndRenderLeads(); });
     </script>
 </body>
 </html>
