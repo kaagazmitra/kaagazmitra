@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaagaz Mitra - CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .kanban-column { min-height: 400px; }
+        .kanban-card { cursor: grab; }
+        .kanban-card:active { cursor: grabbing; }
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal {
+            transition: transform 0.3s ease-in-out;
+        }
+        .dragging {
+            opacity: 0.5;
+            transform: rotate(2deg);
+        }
+        .assignee-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Auth Section -->
+    <div id="auth-section" class="flex items-center justify-center min-h-screen bg-gray-200">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span> CRM</h1>
+                <p class="text-gray-600">Please sign in to continue</p>
+            </div>
+            <div id="auth-error" class="hidden p-3 text-sm text-red-700 bg-red-100 rounded-lg" role="alert"></div>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                    <input type="email" name="email" id="email" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" name="password" id="password" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                </div>
+                <div>
+                    <button type="submit" class="w-full bg-orange-500 text-white px-6 py-3 rounded-full font-semibold transition hover:bg-orange-600">Sign In</button>
+                </div>
+            </form>
+             <p class="text-xs text-center text-gray-500">
+                First time user? Use the credentials provided or contact your administrator to create an account via the Firebase console.
+            </p>
+        </div>
+    </div>
+
+    <!-- CRM Main Content -->
+    <div id="crm-section" class="hidden">
+        <header class="bg-white shadow-md sticky top-0 z-40">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span> CRM</h1>
+                <div>
+                    <span id="user-email" class="text-gray-600 mr-4"></span>
+                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-full transition hover:bg-red-600">Logout</button>
+                </div>
+            </nav>
+        </header>
+
+        <main class="container p-6 mx-auto">
+            <div class="mb-6">
+                <h2 class="text-3xl font-bold text-gray-800">Leads Dashboard</h2>
+                <p class="text-gray-600">Manage all your customer inquiries in one place.</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mb-6 bg-white rounded-lg shadow">
+                 <div class="flex-grow">
+                    <label for="category-filter" class="text-sm font-medium text-gray-700">Filter by Category:</label>
+                    <select id="category-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                        <option value="all">All Categories</option>
+                        <option value="studentInquiries">Students</option>
+                        <option value="businessInquiries">Business</option>
+                        <option value="individualInquiries">Individuals</option>
+                         <option value="inquiries">General Inquiries</option>
+                    </select>
+                </div>
+                <div class="flex-grow">
+                    <label for="assignee-filter" class="text-sm font-medium text-gray-700">Filter by Assignee:</label>
+                    <select id="assignee-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                        <!-- Options populated by JS -->
+                    </select>
+                </div>
+                <div class="flex-grow">
+                    <label for="search-input" class="text-sm font-medium text-gray-700">Search by Name or Email:</label>
+                    <input type="text" id="search-input" placeholder="Search..." class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                </div>
+            </div>
+
+            <!-- Kanban Board -->
+            <div id="kanban-board" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <!-- New Leads Column -->
+                <div id="new" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="New">
+                    <h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-200 pb-2 mb-4">New Leads</h3>
+                    <div class="space-y-4 leads-container"></div>
+                </div>
+                <!-- In Progress Column -->
+                <div id="in-progress" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="In Progress">
+                    <h3 class="text-xl font-bold text-yellow-600 border-b-2 border-yellow-200 pb-2 mb-4">In Progress</h3>
+                    <div class="space-y-4 leads-container"></div>
+                </div>
+                <!-- Completed Column -->
+                <div id="completed" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Completed">
+                    <h3 class="text-xl font-bold text-green-600 border-b-2 border-green-200 pb-2 mb-4">Completed</h3>
+                    <div class="space-y-4 leads-container"></div>
+                </div>
+                <!-- Canceled Column -->
+                <div id="canceled" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Canceled">
+                    <h3 class="text-xl font-bold text-red-600 border-b-2 border-red-200 pb-2 mb-4">Canceled</h3>
+                    <div class="space-y-4 leads-container"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Lead Details Modal -->
+    <div id="lead-modal" class="fixed inset-0 z-50 items-center justify-center hidden modal-backdrop">
+        <div class="relative w-full max-w-2xl p-6 mx-auto my-6 bg-white rounded-lg shadow-2xl modal">
+             <button id="close-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+            <div id="modal-content">
+                <!-- Dynamic content will be injected here -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // This configuration is taken from your public website files.
+        const firebaseConfig = {
+            apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
+            authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
+            projectId: "kaagazmitra-9b2aa",
+            storageBucket: "kaagazmitra-9b2aa.appspot.com",
+            messagingSenderId: "410730658837",
+            appId: "1:410730658837:web:2ce32a16167ce1c26a221c"
+        };
+        
+        // Import Firebase services
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            onSnapshot,
+            doc,
+            updateDoc,
+            addDoc,
+            query,
+            orderBy
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- Team Configuration ---
+        // You can manage your team members here. The email should match their login email for the CRM.
+        const teamMembers = [
+            { name: 'Parth Saini', email: 'parth@kaagazmitra.com' },
+            { name: 'Ashutosh Birla', email: 'ashutosh@kaagazmitra.com' },
+            { name: 'Mohit Saini', email: 'mohit@kaagazmitra.com' },
+            { name: 'Jaspreet Kaur', email: 'jaspreet@kaagazmitra.com' },
+            { name: 'Unassigned', email: 'unassigned' } // Do not remove this
+        ];
+
+        // DOM Elements
+        const authSection = document.getElementById('auth-section');
+        const crmSection = document.getElementById('crm-section');
+        const loginForm = document.getElementById('login-form');
+        const authError = document.getElementById('auth-error');
+        const logoutButton = document.getElementById('logout-button');
+        const userEmailSpan = document.getElementById('user-email');
+        const kanbanBoard = document.getElementById('kanban-board');
+        const categoryFilter = document.getElementById('category-filter');
+        const assigneeFilter = document.getElementById('assignee-filter');
+        const searchInput = document.getElementById('search-input');
+        const leadModal = document.getElementById('lead-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const modalContent = document.getElementById('modal-content');
+
+        let allLeads = []; // To store all leads from all collections
+        let currentCategory = 'all'; 
+        let currentAssignee = 'all';
+        let currentSearchTerm = '';
+
+        // --- Authentication Logic ---
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                authSection.classList.add('hidden');
+                crmSection.classList.remove('hidden');
+                userEmailSpan.textContent = user.email;
+                initializeCrm();
+            } else {
+                authSection.classList.remove('hidden');
+                crmSection.classList.add('hidden');
+                allLeads = [];
+                renderLeads();
+            }
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginForm.email.value;
+            const password = loginForm.password.value;
+            
+            signInWithEmailAndPassword(auth, email, password)
+                .catch(error => {
+                    console.error("Login Error:", error);
+                    authError.textContent = `Error: ${error.message}`;
+                    authError.classList.remove('hidden');
+                });
+        });
+
+        logoutButton.addEventListener('click', () => {
+            signOut(auth).catch(error => console.error("Logout Error:", error));
+        });
+
+        // --- CRM Initialization ---
+        function initializeCrm() {
+            populateAssigneeFilter();
+            fetchAllLeads();
+        }
+
+        function populateAssigneeFilter() {
+            assigneeFilter.innerHTML = '<option value="all">All Team Members</option>';
+            teamMembers.forEach(member => {
+                const option = document.createElement('option');
+                option.value = member.email;
+                option.textContent = member.name;
+                assigneeFilter.appendChild(option);
+            });
+        }
+
+        // --- Firestore & CRM Logic ---
+        function fetchAllLeads() {
+            const collectionsToFetch = ['studentInquiries', 'businessInquiries', 'individualInquiries', 'inquiries'];
+            allLeads = []; // Clear previous leads
+            
+            collectionsToFetch.forEach(collectionName => {
+                const leadsCollection = collection(db, collectionName);
+                const q = query(leadsCollection, orderBy("timestamp", "desc"));
+
+                onSnapshot(q, (snapshot) => {
+                    allLeads = allLeads.filter(lead => lead.collectionName !== collectionName);
+                    snapshot.forEach(doc => {
+                        allLeads.push({ 
+                            id: doc.id, 
+                            collectionName: collectionName, 
+                            ...doc.data() 
+                        });
+                    });
+                    filterAndRenderLeads();
+                }, (error) => {
+                    console.error(`Error fetching ${collectionName}: `, error);
+                });
+            });
+        }
+        
+        function filterAndRenderLeads() {
+            let filteredLeads = [...allLeads];
+
+            if (currentCategory !== 'all') {
+                filteredLeads = filteredLeads.filter(lead => lead.collectionName === currentCategory);
+            }
+            
+            if (currentAssignee !== 'all') {
+                filteredLeads = filteredLeads.filter(lead => (lead.assignedTo || 'unassigned') === currentAssignee);
+            }
+
+            if (currentSearchTerm) {
+                const lowercasedTerm = currentSearchTerm.toLowerCase();
+                filteredLeads = filteredLeads.filter(lead => 
+                    (lead.name && lead.name.toLowerCase().includes(lowercasedTerm)) || 
+                    (lead.email && lead.email.toLowerCase().includes(lowercasedTerm))
+                );
+            }
+            
+            renderLeads(filteredLeads);
+        }
+
+        function renderLeads(leadsToRender = []) {
+            document.querySelectorAll('.leads-container').forEach(container => container.innerHTML = '');
+            leadsToRender.forEach(lead => {
+                const status = lead.status || 'New';
+                const column = document.querySelector(`[data-status="${status}"] .leads-container`);
+                if (column) {
+                    const card = createLeadCard(lead);
+                    column.appendChild(card);
+                }
+            });
+            setupDragAndDrop();
+        }
+        
+        function getInitials(name = '') {
+            if (!name || name === 'Unassigned') return 'U';
+            const parts = name.split(' ');
+            if (parts.length > 1) {
+                return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+        
+        function createLeadCard(lead) {
+            const card = document.createElement('div');
+            card.className = 'p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm kanban-card hover:shadow-md hover:border-orange-300';
+            card.draggable = true;
+            card.dataset.id = lead.id;
+            card.dataset.collection = lead.collectionName;
+
+            const categoryColors = {
+                studentInquiries: 'bg-blue-100 text-blue-800',
+                businessInquiries: 'bg-green-100 text-green-800',
+                individualInquiries: 'bg-purple-100 text-purple-800',
+                inquiries: 'bg-gray-200 text-gray-800'
+            };
+            
+            const categoryNames = {
+                studentInquiries: 'Student',
+                businessInquiries: 'Business',
+                individualInquiries: 'Individual',
+                inquiries: 'General'
+            };
+            
+            const assignedToEmail = lead.assignedTo || 'unassigned';
+            const assignee = teamMembers.find(m => m.email === assignedToEmail) || teamMembers.find(m => m.email === 'unassigned');
+            const assigneeInitials = getInitials(assignee.name);
+            const assigneeColor = assignee.email === 'unassigned' ? 'bg-gray-400' : 'bg-indigo-500';
+
+            card.innerHTML = `
+                <div class="flex justify-between items-start">
+                    <h4 class="font-bold text-gray-900">${lead.name || 'N/A'}</h4>
+                    <span class="text-xs font-semibold px-2 py-1 rounded-full ${categoryColors[lead.collectionName] || 'bg-gray-100'}">
+                        ${categoryNames[lead.collectionName] || 'Unknown'}
+                    </span>
+                </div>
+                <p class="text-sm text-gray-600">${lead.email || 'No email'}</p>
+                <p class="mt-2 text-sm text-gray-500 truncate">${lead.service || lead.message}</p>
+                <div class="flex items-center justify-between mt-3">
+                    <div class="text-xs text-gray-400">
+                        <span>${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span>
+                    </div>
+                    <div class="assignee-avatar ${assigneeColor}" title="Assigned to: ${assignee.name}">
+                        ${assigneeInitials}
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener('click', () => openLeadModal(lead));
+            return card;
+        }
+        
+        // --- Drag and Drop Logic ---
+        function setupDragAndDrop() {
+            const cards = document.querySelectorAll('.kanban-card');
+            const columns = document.querySelectorAll('.kanban-column');
+            let draggedCard = null;
+
+            cards.forEach(card => {
+                card.addEventListener('dragstart', () => {
+                    draggedCard = card;
+                    setTimeout(() => card.classList.add('dragging'), 0);
+                });
+                card.addEventListener('dragend', () => {
+                    draggedCard.classList.remove('dragging');
+                    draggedCard = null;
+                });
+            });
+
+            columns.forEach(column => {
+                column.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(column, e.clientY);
+                    const container = column.querySelector('.leads-container');
+                    if (afterElement == null) {
+                        container.appendChild(draggedCard);
+                    } else {
+                        container.insertBefore(draggedCard, afterElement);
+                    }
+                });
+                column.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const newStatus = column.dataset.status;
+                    const leadId = draggedCard.dataset.id;
+                    const collectionName = draggedCard.dataset.collection;
+                    updateLeadField(collectionName, leadId, { status: newStatus });
+                });
+            });
+        }
+        
+        function getDragAfterElement(column, y) {
+            const draggableElements = [...column.querySelectorAll('.kanban-card:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        // Generic function to update any field for a lead
+        async function updateLeadField(collectionName, leadId, dataToUpdate) {
+            const leadRef = doc(db, collectionName, leadId);
+            try {
+                await updateDoc(leadRef, dataToUpdate);
+                const leadIndex = allLeads.findIndex(l => l.id === leadId && l.collectionName === collectionName);
+                if (leadIndex > -1) {
+                    Object.assign(allLeads[leadIndex], dataToUpdate);
+                }
+                console.log(`Lead ${leadId} updated:`, dataToUpdate);
+                filterAndRenderLeads(); // Re-render to reflect changes immediately
+            } catch (error) {
+                console.error("Error updating lead: ", error);
+                filterAndRenderLeads(); // Re-render to revert visual change on error
+            }
+        }
+        
+        // --- Modal Logic ---
+        function openLeadModal(lead) {
+            const assignedToEmail = lead.assignedTo || 'unassigned';
+            
+            modalContent.innerHTML = `
+                <h3 class="text-2xl font-bold mb-4">${lead.name}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left Column: Details -->
+                    <div class="space-y-4 text-gray-700">
+                        <p><strong>Email:</strong> <a href="mailto:${lead.email}" class="text-blue-600 hover:underline">${lead.email}</a></p>
+                        <p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p>
+                        <p><strong>Category:</strong> ${lead.collectionName}</p>
+                        <p><strong>Service of Interest:</strong> ${lead.service || 'N/A'}</p>
+                        <p><strong>Submitted on:</strong> ${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</p>
+                        <div class="p-3 bg-gray-50 rounded-md border">
+                            <p class="font-semibold">Message:</p>
+                            <p>${lead.message || 'No message provided.'}</p>
+                        </div>
+                    </div>
+                    <!-- Right Column: Actions & Notes -->
+                    <div class="space-y-4">
+                        <div>
+                            <label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label>
+                            <select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">
+                                ${teamMembers.map(member => `<option value="${member.email}" ${assignedToEmail === member.email ? 'selected' : ''}>${member.name}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="mt-6">
+                            <h4 class="font-bold text-lg mb-2">Notes</h4>
+                            <div id="notes-container" class="space-y-2 mb-4 max-h-40 overflow-y-auto p-2 bg-gray-50 border rounded-md">
+                               <!-- Notes will be loaded here -->
+                            </div>
+                            <form id="add-note-form">
+                                <textarea id="note-input" rows="3" placeholder="Add a new note..." class="w-full p-2 border rounded-md focus:ring-orange-500 focus:border-orange-500"></textarea>
+                                <button type="submit" class="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Add Note</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+            leadModal.classList.remove('hidden');
+            leadModal.classList.add('flex');
+            
+            loadNotes(lead.collectionName, lead.id);
+
+            document.getElementById('add-note-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const noteInput = document.getElementById('note-input');
+                const noteText = noteInput.value.trim();
+                if (noteText) {
+                    addNote(lead.collectionName, lead.id, noteText);
+                    noteInput.value = '';
+                }
+            });
+
+            document.getElementById('assign-lead').addEventListener('change', (e) => {
+                const newAssigneeEmail = e.target.value;
+                updateLeadField(lead.collectionName, lead.id, { assignedTo: newAssigneeEmail });
+            });
+        }
+
+        function closeModal() {
+            leadModal.classList.add('hidden');
+            leadModal.classList.remove('flex');
+            modalContent.innerHTML = '';
+        }
+        
+        // --- Notes Functionality ---
+        async function addNote(collectionName, leadId, text) {
+            const notesCollectionRef = collection(db, collectionName, leadId, 'notes');
+            try {
+                await addDoc(notesCollectionRef, {
+                    text: text,
+                    timestamp: new Date(),
+                    author: auth.currentUser.email
+                });
+            } catch (error) {
+                console.error("Error adding note: ", error);
+            }
+        }
+
+        function loadNotes(collectionName, leadId) {
+            const notesContainer = document.getElementById('notes-container');
+            notesContainer.innerHTML = '<p>Loading notes...</p>';
+            const notesCollectionRef = collection(db, collectionName, leadId, 'notes');
+            const q = query(notesCollectionRef, orderBy("timestamp", "desc"));
+
+            onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    notesContainer.innerHTML = '<p class="text-gray-500">No notes yet.</p>';
+                    return;
+                }
+                notesContainer.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const note = doc.data();
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'p-3 bg-white border rounded-md text-sm';
+                    noteElement.innerHTML = `
+                        <p>${note.text}</p>
+                        <p class="text-xs text-gray-400 mt-1">
+                            By ${note.author} on ${new Date(note.timestamp.seconds * 1000).toLocaleString()}
+                        </p>
+                    `;
+                    notesContainer.appendChild(noteElement);
+                });
+            });
+        }
+
+        // --- Event Listeners ---
+        categoryFilter.addEventListener('change', (e) => {
+            currentCategory = e.target.value;
+            filterAndRenderLeads();
+        });
+        
+        assigneeFilter.addEventListener('change', (e) => {
+            currentAssignee = e.target.value;
+            filterAndRenderLeads();
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value;
+            filterAndRenderLeads();
+        });
+        
+        closeModalButton.addEventListener('click', closeModal);
+        leadModal.addEventListener('click', (e) => {
+            if (e.target === leadModal) {
+                closeModal();
+            }
+        });
+
+    </script>
+</body>
+</html>
