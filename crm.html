@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaagaz Mitra - CRM</title>
+    <title>Kaagaz Mitra - Workspace</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -21,6 +21,10 @@
         .chat-message.sent { margin-left: auto; background-color: #3b82f6; color: white; }
         .chat-message.received { margin-right: auto; background-color: #e5e7eb; }
         .online-indicator { width: 10px; height: 10px; border-radius: 50%; }
+        /* Calendar Styles */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+        .calendar-day { min-height: 120px; }
+        .calendar-task { font-size: 0.75rem; padding: 2px 4px; border-radius: 4px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
         .ai-chat-window { height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.375rem; padding: 0.75rem; background-color: #f9fafb; }
         .ai-chat-bubble { max-width: 80%; padding: 0.5rem 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; }
         .ai-chat-bubble.user { background-color: #3b82f6; color: white; margin-left: auto; }
@@ -32,7 +36,7 @@
     <!-- Auth Section -->
     <div id="auth-section" class="flex items-center justify-center min-h-screen bg-gray-200">
         <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
-            <div class="text-center"><h1 class="text-3xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span> CRM</h1><p class="text-gray-600">Please sign in to continue</p></div>
+            <div class="text-center"><h1 class="text-3xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span> Workspace</h1><p class="text-gray-600">Please sign in to continue</p></div>
             <div id="auth-error" class="hidden p-3 text-sm text-red-700 bg-red-100 rounded-lg" role="alert"></div>
             <form id="login-form" class="space-y-6">
                 <div><label for="email" class="block text-sm font-medium text-gray-700">Email Address</label><input type="email" name="email" id="email" required class="w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></div>
@@ -47,9 +51,10 @@
         <header class="bg-white shadow-md sticky top-0 z-40">
             <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center space-x-8">
-                    <h1 class="text-2xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span> CRM</h1>
+                    <h1 class="text-2xl font-bold text-gray-800">Kaagaz<span class="text-orange-500">Mitra</span></h1>
                     <div class="hidden md:flex items-center space-x-2">
                         <a href="#" id="nav-leads" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Leads</a>
+                        <a href="#" id="nav-workspace" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Workspace</a>
                         <a href="#" id="nav-chat" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Team Chat</a>
                     </div>
                 </div>
@@ -61,8 +66,8 @@
         </main>
     </div>
     
-    <div id="lead-modal" class="fixed inset-0 z-50 items-center justify-center hidden overflow-y-auto modal-backdrop">
-        <div class="relative w-full max-w-4xl p-6 mx-auto my-6 bg-white rounded-lg shadow-2xl modal">
+    <div id="modal-backdrop" class="fixed inset-0 z-50 items-center justify-center hidden overflow-y-auto modal-backdrop">
+        <div id="modal-container" class="relative w-full max-w-4xl p-6 mx-auto my-6 bg-white rounded-lg shadow-2xl modal">
              <button id="close-modal-button" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
             <div id="modal-content"></div>
         </div>
@@ -81,7 +86,7 @@
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, query, orderBy, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getDatabase, ref, onValue, set, onDisconnect } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         const app = initializeApp(firebaseConfig);
@@ -93,7 +98,6 @@
         const GEMINI_PROXY_URL = `${CF_WORKER_BASE_URL}/gemini`;
         const CHATGPT_PROXY_URL = `${CF_WORKER_BASE_URL}/chatgpt`;
         const EMAIL_PROXY_URL = `${CF_WORKER_BASE_URL}/email`;
-
         const FROM_EMAIL_ADDRESS = "info@kaagazmitra.com";
 
         const teamMembers = [
@@ -112,16 +116,19 @@
             userEmail: document.getElementById('user-email'),
             mainContent: document.getElementById('main-content'),
             navLeads: document.getElementById('nav-leads'),
+            navWorkspace: document.getElementById('nav-workspace'),
             navChat: document.getElementById('nav-chat'),
-            leadModal: document.getElementById('lead-modal'),
+            modalBackdrop: document.getElementById('modal-backdrop'),
             closeModalButton: document.getElementById('close-modal-button'),
             modalContent: document.getElementById('modal-content')
         };
 
-        let allLeads = [], currentUser = null, unsubscribeChatListener = null, unsubscribeLeadsListeners = [];
+        let allLeads = [], allTasks = [], currentUser = null;
+        let unsubscribeChatListener = null, unsubscribeLeadsListeners = [], unsubscribeTasksListener = null;
         
         // --- App Navigation & Auth ---
         dom.navLeads.addEventListener('click', (e) => { e.preventDefault(); navigate('leads'); });
+        dom.navWorkspace.addEventListener('click', (e) => { e.preventDefault(); navigate('workspace'); });
         dom.navChat.addEventListener('click', (e) => { e.preventDefault(); navigate('chat'); });
         
         onAuthStateChanged(auth, user => {
@@ -139,17 +146,21 @@
                 dom.authSection.classList.remove('hidden');
                 dom.crmSection.classList.add('hidden');
                 unsubscribeLeadsListeners.forEach(unsub => unsub());
+                if (unsubscribeTasksListener) unsubscribeTasksListener();
                 unsubscribeLeadsListeners = [];
             }
         });
 
         function navigate(page) {
-            dom.navLeads.classList.remove('active');
-            dom.navChat.classList.remove('active');
+            ['nav-leads', 'nav-workspace', 'nav-chat'].forEach(id => document.getElementById(id).classList.remove('active'));
             if (unsubscribeChatListener) unsubscribeChatListener();
+            
             if (page === 'leads') {
                 dom.navLeads.classList.add('active');
                 renderLeadsDashboard();
+            } else if (page === 'workspace') {
+                dom.navWorkspace.classList.add('active');
+                renderWorkspaceDashboard();
             } else if (page === 'chat') {
                 dom.navChat.classList.add('active');
                 renderChatDashboard();
@@ -174,9 +185,8 @@
         });
 
         function initializeCrm() {
-            if (unsubscribeLeadsListeners.length === 0) {
-                fetchAllLeads();
-            }
+            if (unsubscribeLeadsListeners.length === 0) fetchAllLeads();
+            if (!unsubscribeTasksListener) fetchAllTasks();
             navigate('leads');
         }
 
@@ -191,6 +201,192 @@
                     set(userStatusRef, isOnline); 
                 }); 
             }); 
+        }
+
+        // --- Workspace Dashboard ---
+        function renderWorkspaceDashboard() {
+            dom.mainContent.innerHTML = `
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800">Team Workspace</h2>
+                        <p class="text-gray-600">Manage tasks and view your team's calendar.</p>
+                    </div>
+                    <button id="add-task-btn" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">
+                        <i class="fas fa-plus mr-2"></i> Add Task
+                    </button>
+                </div>
+                <div class="mb-4 border-b border-gray-200">
+                    <nav class="-mb-px flex space-x-6" id="workspace-tabs">
+                        <button data-view="board" class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Task Board</button>
+                        <button data-view="calendar" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Calendar</button>
+                    </nav>
+                </div>
+                <div id="workspace-view"></div>
+            `;
+            
+            document.getElementById('add-task-btn').addEventListener('click', () => openTaskModal());
+            document.querySelectorAll('#workspace-tabs button').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('#workspace-tabs button').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    if (btn.dataset.view === 'board') renderTaskBoard();
+                    else renderCalendarView();
+                });
+            });
+            renderTaskBoard();
+        }
+
+        function renderTaskBoard() {
+            document.getElementById('workspace-view').innerHTML = `
+                <div id="task-board" class="grid grid-cols-1 gap-6 md:grid-cols-3">
+                    <div class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="To Do"><h3 class="text-xl font-bold text-red-600 border-b-2 border-red-200 pb-2 mb-4">To Do</h3><div class="space-y-4 tasks-container"></div></div>
+                    <div class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="In Progress"><h3 class="text-xl font-bold text-yellow-600 border-b-2 border-yellow-200 pb-2 mb-4">In Progress</h3><div class="space-y-4 tasks-container"></div></div>
+                    <div class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Done"><h3 class="text-xl font-bold text-green-600 border-b-2 border-green-200 pb-2 mb-4">Done</h3><div class="space-y-4 tasks-container"></div></div>
+                </div>`;
+            renderTasks();
+        }
+
+        function renderCalendarView(date = new Date()) {
+             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            const month = date.getMonth();
+            const year = date.getFullYear();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            let calendarHtml = `
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <div class="flex justify-between items-center mb-4">
+                        <button id="prev-month" class="p-2 rounded-md hover:bg-gray-100">&lt;</button>
+                        <h3 class="text-xl font-bold">${monthNames[month]} ${year}</h3>
+                        <button id="next-month" class="p-2 rounded-md hover:bg-gray-100">&gt;</button>
+                    </div>
+                    <div class="calendar-grid border-t border-l">
+                        ${daysOfWeek.map(day => `<div class="p-2 text-center font-bold border-r border-b bg-gray-50">${day}</div>`).join('')}`;
+            for (let i = 0; i < firstDay; i++) { calendarHtml += `<div class="border-r border-b bg-gray-50"></div>`; }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayTasks = allTasks.filter(task => {
+                    const taskDate = task.dueDate?.toDate();
+                    return taskDate && taskDate.getDate() === day && taskDate.getMonth() === month && taskDate.getFullYear() === year;
+                });
+                calendarHtml += `<div class="p-2 border-r border-b calendar-day relative"><div class="font-bold">${day}</div><div class="mt-1">${dayTasks.map(task => `<div class="bg-blue-100 text-blue-800 calendar-task" data-task-id="${task.id}">${task.title}</div>`).join('')}</div></div>`;
+            }
+            calendarHtml += `</div></div>`;
+            document.getElementById('workspace-view').innerHTML = calendarHtml;
+
+            document.getElementById('prev-month').addEventListener('click', () => renderCalendarView(new Date(year, month - 1, 1)));
+            document.getElementById('next-month').addEventListener('click', () => renderCalendarView(new Date(year, month + 1, 1)));
+            document.querySelectorAll('.calendar-task').forEach(el => {
+                el.addEventListener('click', () => {
+                    const task = allTasks.find(t => t.id === el.dataset.taskId);
+                    if (task) openTaskModal(task);
+                });
+            });
+        }
+
+        // --- Task Logic ---
+        function fetchAllTasks() {
+            const q = query(collection(db, "tasks"), orderBy("createdAt", "desc"));
+            unsubscribeTasksListener = onSnapshot(q, (snapshot) => {
+                allTasks = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (document.getElementById('workspace-view')) {
+                    if (document.querySelector('.tab-button[data-view="board"].active')) {
+                        renderTaskBoard();
+                    } else {
+                        renderCalendarView();
+                    }
+                }
+            });
+        }
+        
+        function renderTasks() {
+            document.querySelectorAll('.tasks-container').forEach(c => c.innerHTML = '');
+            allTasks.forEach(task => {
+                const column = document.querySelector(`.kanban-column[data-status="${task.status}"] .tasks-container`);
+                if (column) column.appendChild(createTaskCard(task));
+            });
+            setupTaskDragAndDrop();
+        }
+
+        function createTaskCard(task) {
+            const card = document.createElement('div');
+            card.className = 'p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm kanban-card hover:shadow-md hover:border-orange-300';
+            card.draggable = true;
+            card.dataset.id = task.id;
+            const assignee = teamMembers.find(m => m.email === task.assigneeEmail) || { name: 'Unassigned' };
+            card.innerHTML = `<h4 class="font-bold text-gray-900">${task.title}</h4><p class="text-sm text-gray-600 my-2">${task.description}</p><div class="flex items-center justify-between mt-3 text-xs text-gray-500"><span>Due: ${task.dueDate ? task.dueDate.toDate().toLocaleDateString() : 'N/A'}</span><div class="assignee-avatar bg-indigo-500" title="Assigned to: ${assignee.name}">${getInitials(assignee.name)}</div></div>`;
+            card.addEventListener('click', () => openTaskModal(task));
+            return card;
+        }
+
+        function setupTaskDragAndDrop() {
+            const cards = document.querySelectorAll('#task-board .kanban-card');
+            const columns = document.querySelectorAll('#task-board .kanban-column');
+            let draggedCard = null;
+            cards.forEach(card => {
+                card.addEventListener('dragstart', () => { draggedCard = card; setTimeout(() => card.classList.add('dragging'), 0); });
+                card.addEventListener('dragend', () => { draggedCard.classList.remove('dragging'); draggedCard = null; });
+            });
+            columns.forEach(column => {
+                column.addEventListener('dragover', e => { e.preventDefault(); });
+                column.addEventListener('drop', async e => {
+                    e.preventDefault();
+                    column.querySelector('.tasks-container').appendChild(draggedCard);
+                    await updateDoc(doc(db, "tasks", draggedCard.dataset.id), { status: column.dataset.status });
+                });
+            });
+        }
+
+        function openTaskModal(task = {}) {
+            dom.modalContent.innerHTML = `
+                <h3 class="text-2xl font-bold mb-4">${task.id ? 'Edit Task' : 'New Task'}</h3>
+                <form id="task-form" class="space-y-4">
+                    <div><label for="task-title" class="block text-sm font-medium text-gray-700">Title</label><input type="text" id="task-title" required class="w-full p-2 mt-1 border rounded-md" value="${task.title || ''}"></div>
+                    <div><label for="task-description" class="block text-sm font-medium text-gray-700">Description</label><textarea id="task-description" rows="4" class="w-full p-2 mt-1 border rounded-md">${task.description || ''}</textarea></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label for="task-assignee" class="block text-sm font-medium text-gray-700">Assign To</label><select id="task-assignee" class="w-full p-2 mt-1 border rounded-md">${teamMembers.map(m => `<option value="${m.email}" ${task.assigneeEmail === m.email ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div>
+                        <div><label for="task-due-date" class="block text-sm font-medium text-gray-700">Due Date</label><input type="date" id="task-due-date" class="w-full p-2 mt-1 border rounded-md" value="${task.dueDate ? task.dueDate.toDate().toISOString().split('T')[0] : ''}"></div>
+                    </div>
+                    <div class="flex justify-between items-center pt-4">
+                        <div>${task.id ? `<button type="button" id="delete-task-btn" class="text-red-600 hover:text-red-800">Delete Task</button>` : ''}</div>
+                        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Save Task</button>
+                    </div>
+                </form>`;
+            
+            dom.modalBackdrop.classList.remove('hidden');
+            dom.modalBackdrop.classList.add('flex');
+
+            document.getElementById('task-form').addEventListener('submit', async e => {
+                e.preventDefault();
+                const dueDateValue = document.getElementById('task-due-date').value;
+                const taskData = {
+                    title: document.getElementById('task-title').value,
+                    description: document.getElementById('task-description').value,
+                    assigneeEmail: document.getElementById('task-assignee').value,
+                    dueDate: dueDateValue ? new Date(dueDateValue) : null
+                };
+                
+                try {
+                    if (task.id) {
+                        await updateDoc(doc(db, "tasks", task.id), taskData);
+                    } else {
+                        await addDoc(collection(db, "tasks"), { ...taskData, status: 'To Do', createdAt: serverTimestamp(), createdBy: currentUser.email });
+                    }
+                    closeModal();
+                } catch (error) {
+                    console.error("Error saving task:", error);
+                    alert("Could not save task. Check console for details.");
+                }
+            });
+
+            if (task.id) {
+                document.getElementById('delete-task-btn').addEventListener('click', async () => {
+                    if (confirm('Are you sure you want to delete this task?')) {
+                        await deleteDoc(doc(db, "tasks", task.id));
+                        closeModal();
+                    }
+                });
+            }
         }
 
         // --- Leads Dashboard ---
@@ -223,351 +419,33 @@
             document.getElementById('search-input').addEventListener('input', () => filterAndRenderLeads());
             filterAndRenderLeads();
         }
+
+        function getInitials(name = '') { if (!name || name === 'Unassigned') return 'U'; const parts = name.split(' '); return parts.length > 1 ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase() : name.substring(0, 2).toUpperCase(); }
         
-        // --- Chat Dashboard ---
-        function renderChatDashboard() {
-            dom.mainContent.innerHTML = `<div class="grid grid-cols-12 gap-6 h-[calc(100vh-150px)]"><div class="col-span-3 bg-white p-4 rounded-lg shadow overflow-y-auto"><h3 class="text-xl font-bold mb-4">Team</h3><ul id="team-list" class="space-y-2"></ul></div><div class="col-span-9 bg-white rounded-lg shadow flex flex-col"><div id="chat-header" class="p-4 border-b font-bold text-lg">Select a conversation</div><div id="chat-messages" class="flex-grow p-4 space-y-4 overflow-y-auto"></div><div id="chat-input-container" class="p-4 border-t hidden"><form id="chat-form" class="flex space-x-2"><input type="text" id="chat-input" class="flex-grow p-2 border rounded-md" placeholder="Type a message..." autocomplete="off"><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Send</button></form></div></div></div>`;
-            populateTeamList();
-        }
-
-        function populateTeamList() {
-            const teamListEl = document.getElementById('team-list');
-            teamListEl.innerHTML = `<li><button data-chat-id="group" data-chat-name="Group Chat" class="w-full text-left p-2 rounded-md hover:bg-gray-100 flex items-center space-x-3"><i class="fas fa-users text-gray-600"></i><span>Group Chat</span></button></li>`;
-            teamListEl.querySelector('button').addEventListener('click', (e) => openChat(e.currentTarget.dataset.chatId, e.currentTarget.dataset.chatName));
-
-            const statusRef = ref(rtdb, 'status');
-            onValue(statusRef, (snapshot) => {
-                const statuses = snapshot.val() || {};
-                teamListEl.querySelectorAll('.team-member-item').forEach(item => item.remove());
-                teamMembers.filter(m => m.email !== currentUser.email).forEach(member => {
-                    const li = document.createElement('li');
-                    li.className = 'team-member-item';
-                    const memberStatus = Object.values(statuses).find(s => s.name === member.name);
-                    const isOnline = memberStatus && memberStatus.state === 'online';
-                    li.innerHTML = `<button data-chat-id="${member.email}" data-chat-name="${member.name}" class="w-full text-left p-2 rounded-md hover:bg-gray-100 flex items-center space-x-3"><span class="online-indicator ${isOnline ? 'bg-green-500' : 'bg-gray-400'}"></span><span>${member.name}</span></button>`;
-                    teamListEl.appendChild(li);
-                });
-                teamListEl.querySelectorAll('.team-member-item button').forEach(btn => {
-                    btn.addEventListener('click', (e) => openChat(e.currentTarget.dataset.chatId, e.currentTarget.dataset.chatName));
-                });
-            });
-        }
-
-        function openChat(chatId, chatName) {
-            if (unsubscribeChatListener) unsubscribeChatListener();
-            document.getElementById('chat-header').textContent = chatName;
-            document.getElementById('chat-input-container').classList.remove('hidden');
-            const messagesEl = document.getElementById('chat-messages');
-            messagesEl.innerHTML = '';
-            let chatQuery;
-            if (chatId === 'group') {
-                chatQuery = query(collection(db, 'chats', 'group_chat', 'messages'), orderBy('timestamp'));
-            } else {
-                const members = [currentUser.email, chatId].sort();
-                const privateChatId = members.join('_');
-                chatQuery = query(collection(db, 'chats', privateChatId, 'messages'), orderBy('timestamp'));
-            }
-            unsubscribeChatListener = onSnapshot(chatQuery, (snapshot) => {
-                messagesEl.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const msg = doc.data();
-                    const msgEl = document.createElement('div');
-                    const isSent = msg.senderEmail === currentUser.email;
-                    msgEl.className = `p-3 rounded-lg chat-message ${isSent ? 'sent' : 'received'}`;
-                    msgEl.innerHTML = `<div class="font-bold text-sm">${isSent ? 'You' : msg.senderName}</div><div>${msg.text}</div><div class="text-xs opacity-70 mt-1 text-right">${msg.timestamp ? msg.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>`;
-                    messagesEl.appendChild(msgEl);
-                });
-                messagesEl.scrollTop = messagesEl.scrollHeight;
-            });
-            const chatForm = document.getElementById('chat-form');
-            const newChatForm = chatForm.cloneNode(true);
-            chatForm.parentNode.replaceChild(newChatForm, chatForm);
-            newChatForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const input = newChatForm.querySelector('#chat-input');
-                if (input.value.trim()) {
-                    sendMessage(chatId, input.value.trim());
-                    input.value = '';
-                }
-            });
-        }
-
-        async function sendMessage(chatId, text) {
-            let collectionPath;
-            if (chatId === 'group') {
-                collectionPath = collection(db, 'chats', 'group_chat', 'messages');
-            } else {
-                const members = [currentUser.email, chatId].sort();
-                const privateChatId = members.join('_');
-                collectionPath = collection(db, 'chats', privateChatId, 'messages');
-            }
-            await addDoc(collectionPath, { text, senderEmail: currentUser.email, senderName: currentUser.displayName, timestamp: serverTimestamp() });
-        }
-
-        // --- Leads Logic ---
-        function fetchAllLeads() {
-            const collections = ['studentInquiries', 'businessInquiries', 'individualInquiries', 'inquiries'];
-            unsubscribeLeadsListeners.forEach(unsub => unsub());
-            unsubscribeLeadsListeners = [];
-            collections.forEach(name => {
-                const q = query(collection(db, name), orderBy("timestamp", "desc"));
-                const unsubscribe = onSnapshot(q, snapshot => {
-                    allLeads = allLeads.filter(lead => lead.collectionName !== name);
-                    snapshot.forEach(doc => allLeads.push({ id: doc.id, collectionName: name, ...doc.data() }));
-                    if (dom.navLeads.classList.contains('active')) {
-                        filterAndRenderLeads();
-                    }
-                }, err => console.error(`Error fetching ${name}:`, err));
-                unsubscribeLeadsListeners.push(unsubscribe);
-            });
-        }
-
-        function filterAndRenderLeads() {
-            let leads = [...allLeads];
-            const categoryFilter = document.getElementById('category-filter');
-            const assigneeFilter = document.getElementById('assignee-filter');
-            const searchInput = document.getElementById('search-input');
-            if (categoryFilter && categoryFilter.value !== 'all') {
-                leads = leads.filter(l => l.collectionName === categoryFilter.value);
-            }
-            if (assigneeFilter && assigneeFilter.value !== 'all') {
-                leads = leads.filter(l => (l.assignedTo || 'unassigned') === assigneeFilter.value);
-            }
-            if (searchInput && searchInput.value) {
-                const term = searchInput.value.toLowerCase();
-                leads = leads.filter(l => (l.name && l.name.toLowerCase().includes(term)) || (l.email && l.email.toLowerCase().includes(term)));
-            }
-            renderLeads(leads);
-        }
-
-        function renderLeads(leads = []) {
-            const leadsContainers = document.querySelectorAll('.leads-container');
-            if (!leadsContainers.length) return;
-            leadsContainers.forEach(c => c.innerHTML = '');
-            leads.forEach(lead => {
-                const status = lead.status || 'New';
-                const column = document.querySelector(`[data-status="${status}"] .leads-container`);
-                if (column) column.appendChild(createLeadCard(lead));
-            });
-            setupDragAndDrop();
-        }
-
-        function getInitials(name = '') {
-            if (!name || name === 'Unassigned') return 'U';
-            const parts = name.split(' ');
-            return parts.length > 1 ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase() : name.substring(0, 2).toUpperCase();
-        }
-
-        function createLeadCard(lead) {
-            const card = document.createElement('div');
-            card.className = 'p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm kanban-card hover:shadow-md hover:border-orange-300';
-            card.draggable = true;
-            card.dataset.id = lead.id;
-            card.dataset.collection = lead.collectionName;
-            const categoryInfo = { studentInquiries: { name: 'Student', color: 'bg-blue-100 text-blue-800' }, businessInquiries: { name: 'Business', color: 'bg-green-100 text-green-800' }, individualInquiries: { name: 'Individual', color: 'bg-purple-100 text-purple-800' }, inquiries: { name: 'General', color: 'bg-gray-200 text-gray-800' } };
-            const cat = categoryInfo[lead.collectionName] || { name: 'Unknown', color: 'bg-gray-100' };
-            const assignee = teamMembers.find(m => m.email === (lead.assignedTo || 'unassigned')) || {name: 'Unassigned', email: 'unassigned'};
-            const assigneeInitials = getInitials(assignee.name);
-            const assigneeColor = assignee.email === 'unassigned' ? 'bg-gray-400' : 'bg-indigo-500';
-            card.innerHTML = `<div class="flex justify-between items-start"><h4 class="font-bold text-gray-900">${lead.name || 'N/A'}</h4><span class="text-xs font-semibold px-2 py-1 rounded-full ${cat.color}">${cat.name}</span></div><p class="text-sm text-gray-600">${lead.email || 'No email'}</p><p class="mt-2 text-sm text-gray-500 truncate">${lead.service || lead.message}</p><div class="flex items-center justify-between mt-3"><div class="text-xs text-gray-400"><span>${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span></div><div class="assignee-avatar ${assigneeColor}" title="Assigned to: ${assignee.name}">${assigneeInitials}</div></div>`;
-            card.addEventListener('click', () => openLeadModal(lead));
-            return card;
-        }
-
-        function setupDragAndDrop() {
-            const cards = document.querySelectorAll('.kanban-card');
-            const columns = document.querySelectorAll('.kanban-column');
-            let draggedCard = null;
-            cards.forEach(card => {
-                card.addEventListener('dragstart', () => { draggedCard = card; setTimeout(() => card.classList.add('dragging'), 0); });
-                card.addEventListener('dragend', () => { draggedCard.classList.remove('dragging'); draggedCard = null; });
-            });
-            columns.forEach(column => {
-                column.addEventListener('dragover', e => { e.preventDefault(); });
-                column.addEventListener('drop', e => {
-                    e.preventDefault();
-                    const container = column.querySelector('.leads-container');
-                    container.appendChild(draggedCard);
-                    updateLeadField(draggedCard.dataset.collection, draggedCard.dataset.id, { status: column.dataset.status });
-                });
-            });
-        }
-
-        async function updateLeadField(collectionName, leadId, dataToUpdate) {
-            const leadRef = doc(db, collectionName, leadId);
-            try {
-                await updateDoc(leadRef, dataToUpdate);
-                const leadIndex = allLeads.findIndex(l => l.id === leadId && l.collectionName === collectionName);
-                if (leadIndex > -1) Object.assign(allLeads[leadIndex], dataToUpdate);
-                filterAndRenderLeads();
-            } catch (error) {
-                console.error("Error updating lead: ", error);
-                filterAndRenderLeads();
-            }
-        }
-
-        function openLeadModal(lead) {
-            dom.modalContent.innerHTML = `<h3 class="text-2xl font-bold mb-4">${lead.name}</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="space-y-4 text-gray-700"><p><strong>Email:</strong> <a href="mailto:${lead.email}" class="text-blue-600 hover:underline">${lead.email}</a></p><p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p><p><strong>Category:</strong> ${lead.collectionName}</p><p><strong>Service of Interest:</strong> ${lead.service || 'N/A'}</p><p><strong>Submitted on:</strong> ${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</p><div class="p-3 bg-gray-50 rounded-md border"><p class="font-semibold">Message:</p><p>${lead.message || 'No message provided.'}</p></div><div><label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label><select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">${teamMembers.map(m => `<option value="${m.email}" ${(lead.assignedTo || 'unassigned') === m.email ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div></div><div><div class="border-b border-gray-200 mb-4"><nav class="-mb-px flex space-x-6" id="modal-tabs"></nav></div><div id="modal-tab-content"></div></div></div>`;
-            setupModalTabs(lead);
-            dom.leadModal.classList.remove('hidden');
-            dom.leadModal.classList.add('flex');
-            document.getElementById('assign-lead').addEventListener('change', e => updateLeadField(lead.collectionName, lead.id, { assignedTo: e.target.value }));
-        }
-
-        function setupModalTabs(lead) {
-            const tabsContainer = document.getElementById('modal-tabs');
-            const tabContentContainer = document.getElementById('modal-tab-content');
-            const tabs = [{ name: 'Notes', content: getNotesContent() }, { name: 'Email Client', content: getEmailContent() }, { name: 'Team Assistant', content: getChatGPTContent() }];
-            tabsContainer.innerHTML = '';
-            tabs.forEach((tab, index) => {
-                const button = document.createElement('button');
-                button.textContent = tab.name;
-                button.className = `whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 tab-button ${index === 0 ? 'active' : ''}`;
-                button.addEventListener('click', () => {
-                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    tabContentContainer.innerHTML = tab.content;
-                    activateTabContent(tab.name, lead);
-                });
-                tabsContainer.appendChild(button);
-            });
-            tabContentContainer.innerHTML = tabs[0].content;
-            activateTabContent(tabs[0].name, lead);
-        }
-
-        function activateTabContent(tabName, lead) {
-            if (tabName === 'Notes') loadNotes(lead.collectionName, lead.id);
-            if (tabName === 'Email Client') setupEmailAssistant(lead);
-            if (tabName === 'Team Assistant') setupChatGPTAssistant(lead);
-        }
-
+        function fetchAllLeads() { const collections = ['studentInquiries', 'businessInquiries', 'individualInquiries', 'inquiries']; unsubscribeLeadsListeners.forEach(unsub => unsub()); unsubscribeLeadsListeners = []; collections.forEach(name => { const q = query(collection(db, name), orderBy("timestamp", "desc")); const unsubscribe = onSnapshot(q, snapshot => { allLeads = allLeads.filter(lead => lead.collectionName !== name); snapshot.forEach(doc => allLeads.push({ id: doc.id, collectionName: name, ...doc.data() })); if (dom.navLeads.classList.contains('active')) { filterAndRenderLeads(); } }, err => console.error(`Error fetching ${name}:`, err)); unsubscribeLeadsListeners.push(unsubscribe); }); }
+        function filterAndRenderLeads() { let leads = [...allLeads]; const categoryFilter = document.getElementById('category-filter'); const assigneeFilter = document.getElementById('assignee-filter'); const searchInput = document.getElementById('search-input'); if (categoryFilter && categoryFilter.value !== 'all') { leads = leads.filter(l => l.collectionName === categoryFilter.value); } if (assigneeFilter && assigneeFilter.value !== 'all') { leads = leads.filter(l => (l.assignedTo || 'unassigned') === assigneeFilter.value); } if (searchInput && searchInput.value) { const term = searchInput.value.toLowerCase(); leads = leads.filter(l => (l.name && l.name.toLowerCase().includes(term)) || (l.email && l.email.toLowerCase().includes(term))); } renderLeads(leads); }
+        function renderLeads(leads = []) { const leadsContainers = document.querySelectorAll('.leads-container'); if (!leadsContainers.length) return; leadsContainers.forEach(c => c.innerHTML = ''); leads.forEach(lead => { const status = lead.status || 'New'; const column = document.querySelector(`[data-status="${status}"] .leads-container`); if (column) column.appendChild(createLeadCard(lead)); }); setupDragAndDrop(); }
+        function createLeadCard(lead) { const card = document.createElement('div'); card.className = 'p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm kanban-card hover:shadow-md hover:border-orange-300'; card.draggable = true; card.dataset.id = lead.id; card.dataset.collection = lead.collectionName; const categoryInfo = { studentInquiries: { name: 'Student', color: 'bg-blue-100 text-blue-800' }, businessInquiries: { name: 'Business', color: 'bg-green-100 text-green-800' }, individualInquiries: { name: 'Individual', color: 'bg-purple-100 text-purple-800' }, inquiries: { name: 'General', color: 'bg-gray-200 text-gray-800' } }; const cat = categoryInfo[lead.collectionName] || { name: 'Unknown', color: 'bg-gray-100' }; const assignee = teamMembers.find(m => m.email === (lead.assignedTo || 'unassigned')) || {name: 'Unassigned', email: 'unassigned'}; const assigneeInitials = getInitials(assignee.name); const assigneeColor = assignee.email === 'unassigned' ? 'bg-gray-400' : 'bg-indigo-500'; card.innerHTML = `<div class="flex justify-between items-start"><h4 class="font-bold text-gray-900">${lead.name || 'N/A'}</h4><span class="text-xs font-semibold px-2 py-1 rounded-full ${cat.color}">${cat.name}</span></div><p class="text-sm text-gray-600">${lead.email || 'No email'}</p><p class="mt-2 text-sm text-gray-500 truncate">${lead.service || lead.message}</p><div class="flex items-center justify-between mt-3"><div class="text-xs text-gray-400"><span>${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span></div><div class="assignee-avatar ${assigneeColor}" title="Assigned to: ${assignee.name}">${assigneeInitials}</div></div>`; card.addEventListener('click', () => openLeadModal(lead)); return card; }
+        function setupDragAndDrop() { const cards = document.querySelectorAll('#kanban-board .kanban-card'); const columns = document.querySelectorAll('#kanban-board .kanban-column'); let draggedCard = null; cards.forEach(card => { card.addEventListener('dragstart', () => { draggedCard = card; setTimeout(() => card.classList.add('dragging'), 0); }); card.addEventListener('dragend', () => { draggedCard.classList.remove('dragging'); draggedCard = null; }); }); columns.forEach(column => { column.addEventListener('dragover', e => { e.preventDefault(); }); column.addEventListener('drop', e => { e.preventDefault(); const container = column.querySelector('.leads-container'); container.appendChild(draggedCard); updateLeadField(draggedCard.dataset.collection, draggedCard.dataset.id, { status: column.dataset.status }); }); }); }
+        async function updateLeadField(collectionName, leadId, dataToUpdate) { const leadRef = doc(db, collectionName, leadId); try { await updateDoc(leadRef, dataToUpdate); const leadIndex = allLeads.findIndex(l => l.id === leadId && l.collectionName === collectionName); if (leadIndex > -1) Object.assign(allLeads[leadIndex], dataToUpdate); filterAndRenderLeads(); } catch (error) { console.error("Error updating lead: ", error); filterAndRenderLeads(); } }
+        function openLeadModal(lead) { dom.modalContent.innerHTML = `<h3 class="text-2xl font-bold mb-4">${lead.name}</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="space-y-4 text-gray-700"><p><strong>Email:</strong> <a href="mailto:${lead.email}" class="text-blue-600 hover:underline">${lead.email}</a></p><p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p><p><strong>Category:</strong> ${lead.collectionName}</p><p><strong>Service of Interest:</strong> ${lead.service || 'N/A'}</p><p><strong>Submitted on:</strong> ${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</p><div class="p-3 bg-gray-50 rounded-md border"><p class="font-semibold">Message:</p><p>${lead.message || 'No message provided.'}</p></div><div><label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label><select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">${teamMembers.map(m => `<option value="${m.email}" ${(lead.assignedTo || 'unassigned') === m.email ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div></div><div><div class="border-b border-gray-200 mb-4"><nav class="-mb-px flex space-x-6" id="modal-tabs"></nav></div><div id="modal-tab-content"></div></div></div>`; setupModalTabs(lead); dom.modalBackdrop.classList.remove('hidden'); dom.modalBackdrop.classList.add('flex'); document.getElementById('assign-lead').addEventListener('change', e => updateLeadField(lead.collectionName, lead.id, { assignedTo: e.target.value })); }
+        function setupModalTabs(lead) { const tabsContainer = document.getElementById('modal-tabs'); const tabContentContainer = document.getElementById('modal-tab-content'); const tabs = [{ name: 'Notes', content: getNotesContent() }, { name: 'Email Client', content: getEmailContent() }, { name: 'Team Assistant', content: getChatGPTContent() }]; tabsContainer.innerHTML = ''; tabs.forEach((tab, index) => { const button = document.createElement('button'); button.textContent = tab.name; button.className = `whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 tab-button ${index === 0 ? 'active' : ''}`; button.addEventListener('click', () => { document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active')); button.classList.add('active'); tabContentContainer.innerHTML = tab.content; activateTabContent(tab.name, lead); }); tabsContainer.appendChild(button); }); tabContentContainer.innerHTML = tabs[0].content; activateTabContent(tabs[0].name, lead); }
+        function activateTabContent(tabName, lead) { if (tabName === 'Notes') loadNotes(lead.collectionName, lead.id); if (tabName === 'Email Client') setupEmailAssistant(lead); if (tabName === 'Team Assistant') setupChatGPTAssistant(lead); }
         function getNotesContent() { return `<h4 class="font-bold text-lg mb-2">Notes</h4><div id="notes-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 border rounded-md"></div><form id="add-note-form"><textarea id="note-input" rows="3" placeholder="Add a new note..." class="w-full p-2 border rounded-md focus:ring-orange-500 focus:border-orange-500"></textarea><button type="submit" class="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Add Note</button></form>`; }
-        
-        function loadNotes(collectionName, leadId) {
-            const notesContainer = document.getElementById('notes-container');
-            const q = query(collection(db, collectionName, leadId, 'notes'), orderBy("timestamp", "desc"));
-            onSnapshot(q, snapshot => {
-                if (!notesContainer) return;
-                if (snapshot.empty) { notesContainer.innerHTML = '<p class="text-gray-500">No notes yet.</p>'; return; }
-                notesContainer.innerHTML = '';
-                snapshot.forEach(doc => {
-                    const note = doc.data();
-                    const noteEl = document.createElement('div');
-                    noteEl.className = 'p-3 bg-white border rounded-md text-sm';
-                    noteEl.innerHTML = `<p>${note.text}</p><p class="text-xs text-gray-400 mt-1">By ${note.author} on ${new Date(note.timestamp.seconds * 1000).toLocaleString()}</p>`;
-                    notesContainer.appendChild(noteEl);
-                });
-            });
-            document.getElementById('add-note-form').addEventListener('submit', e => {
-                e.preventDefault();
-                const noteInput = document.getElementById('note-input');
-                if (noteInput.value.trim()) { addNote(collectionName, leadId, noteInput.value.trim()); noteInput.value = ''; }
-            });
-        }
-        
+        function loadNotes(collectionName, leadId) { const notesContainer = document.getElementById('notes-container'); const q = query(collection(db, collectionName, leadId, 'notes'), orderBy("timestamp", "desc")); onSnapshot(q, snapshot => { if (!notesContainer) return; if (snapshot.empty) { notesContainer.innerHTML = '<p class="text-gray-500">No notes yet.</p>'; return; } notesContainer.innerHTML = ''; snapshot.forEach(doc => { const note = doc.data(); const noteEl = document.createElement('div'); noteEl.className = 'p-3 bg-white border rounded-md text-sm'; noteEl.innerHTML = `<p>${note.text}</p><p class="text-xs text-gray-400 mt-1">By ${note.author} on ${new Date(note.timestamp.seconds * 1000).toLocaleString()}</p>`; notesContainer.appendChild(noteEl); }); }); document.getElementById('add-note-form').addEventListener('submit', e => { e.preventDefault(); const noteInput = document.getElementById('note-input'); if (noteInput.value.trim()) { addNote(collectionName, leadId, noteInput.value.trim()); noteInput.value = ''; } }); }
         async function addNote(collectionName, leadId, text) { await addDoc(collection(db, collectionName, leadId, 'notes'), { text, timestamp: serverTimestamp(), author: currentUser.email }); }
-        
         function getEmailContent() { return `<h4 class="font-bold text-lg mb-2">Email Client</h4><div class="space-y-4"><div><label for="email-subject" class="block text-sm font-medium text-gray-700">Subject</label><input type="text" id="email-subject" class="w-full p-2 mt-1 border rounded-md"></div><div><label for="email-body" class="block text-sm font-medium text-gray-700">Body</label><textarea id="email-body" rows="8" class="w-full p-2 mt-1 border rounded-md"></textarea></div><div class="flex items-center justify-between"><button id="draft-email-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"><i class="fas fa-magic mr-2"></i> Draft with AI</button><button id="send-email-btn" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"><i class="fas fa-paper-plane mr-2"></i> Send Email</button></div><div id="email-status" class="text-sm"></div></div>`; }
-
-        function setupEmailAssistant(lead) {
-            const subjectEl = document.getElementById('email-subject');
-            const bodyEl = document.getElementById('email-body');
-            const draftBtn = document.getElementById('draft-email-btn');
-            const sendBtn = document.getElementById('send-email-btn');
-            const statusEl = document.getElementById('email-status');
-            subjectEl.value = `Re: Your Kaagaz Mitra Inquiry`;
-            draftBtn.addEventListener('click', async () => {
-                draftBtn.disabled = true;
-                draftBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Drafting...';
-                const prompt = `You are a helpful assistant for "Kaagaz Mitra". A customer named "${lead.name}" contacted us about "${lead.service}". Their message: "${lead.message}". Draft a professional, friendly email reply body (do not include the subject line). Address them by name, acknowledge their query, provide a brief next step, and sign off from the "Kaagaz Mitra Team".`;
-                try {
-                    const response = await fetch(GEMINI_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        throw new Error(`API Error: ${errorText || response.statusText}`);
-                    }
-                    const data = await response.json();
-                    bodyEl.value = data.text;
-                } catch (error) {
-                    statusEl.textContent = `Error: Could not draft email. ${error.message}`;
-                    statusEl.className = 'text-red-600';
-                } finally {
-                    draftBtn.disabled = false;
-                    draftBtn.innerHTML = '<i class="fas fa-magic mr-2"></i> Draft with AI';
-                }
-            });
-            sendBtn.addEventListener('click', async () => {
-                sendBtn.disabled = true;
-                sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
-                statusEl.textContent = '';
-                try {
-                    const response = await fetch(EMAIL_PROXY_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ to: lead.email, from: FROM_EMAIL_ADDRESS, subject: subjectEl.value, body: bodyEl.value.replace(/\n/g, '<br>') })
-                    });
-                    if (!response.ok) throw new Error(`Server Error: ${response.statusText}`);
-                    const data = await response.json();
-                    if (data.success) {
-                        statusEl.textContent = 'Email sent successfully!';
-                        statusEl.className = 'text-green-600';
-                        addNote(lead.collectionName, lead.id, `Email sent to client with subject: "${subjectEl.value}"`);
-                    } else {
-                        throw new Error('Failed to send email.');
-                    }
-                } catch (error) {
-                    statusEl.textContent = `Error: ${error.message}`;
-                    statusEl.className = 'text-red-600';
-                } finally {
-                    sendBtn.disabled = false;
-                    sendBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Send Email';
-                }
-            });
-        }
-        
+        function setupEmailAssistant(lead) { const subjectEl = document.getElementById('email-subject'); const bodyEl = document.getElementById('email-body'); const draftBtn = document.getElementById('draft-email-btn'); const sendBtn = document.getElementById('send-email-btn'); const statusEl = document.getElementById('email-status'); subjectEl.value = `Re: Your Kaagaz Mitra Inquiry`; draftBtn.addEventListener('click', async () => { draftBtn.disabled = true; draftBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Drafting...'; const prompt = `You are a helpful assistant for "Kaagaz Mitra". A customer named "${lead.name}" contacted us about "${lead.service}". Their message: "${lead.message}". Draft a professional, friendly email reply body (do not include the subject line). Address them by name, acknowledge their query, provide a brief next step, and sign off from the "Kaagaz Mitra Team".`; try { const response = await fetch(GEMINI_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) }); if (!response.ok) { const errorText = await response.text(); throw new Error(`API Error: ${errorText || response.statusText}`); } const data = await response.json(); bodyEl.value = data.text; } catch (error) { statusEl.textContent = `Error: Could not draft email. ${error.message}`; statusEl.className = 'text-red-600'; } finally { draftBtn.disabled = false; draftBtn.innerHTML = '<i class="fas fa-magic mr-2"></i> Draft with AI'; } }); sendBtn.addEventListener('click', async () => { sendBtn.disabled = true; sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...'; statusEl.textContent = ''; try { const response = await fetch(EMAIL_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: lead.email, from: FROM_EMAIL_ADDRESS, subject: subjectEl.value, body: bodyEl.value.replace(/\n/g, '<br>') }) }); if (!response.ok) throw new Error(`Server Error: ${response.statusText}`); const data = await response.json(); if (data.success) { statusEl.textContent = 'Email sent successfully!'; statusEl.className = 'text-green-600'; addNote(lead.collectionName, lead.id, `Email sent to client with subject: "${subjectEl.value}"`); } else { throw new Error('Failed to send email.'); } } catch (error) { statusEl.textContent = `Error: ${error.message}`; statusEl.className = 'text-red-600'; } finally { sendBtn.disabled = false; sendBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Send Email'; } }); }
         function getChatGPTContent() { return `<h4 class="font-bold text-lg mb-2">Internal Team Assistant</h4><div id="chatgpt-window" class="ai-chat-window mb-2"></div><form id="chatgpt-form" class="flex space-x-2"><input type="text" id="chatgpt-input" class="flex-grow p-2 border rounded-md" placeholder="Ask a question about this lead..."><button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Send</button></form>`; }
-        
-        function setupChatGPTAssistant(lead) {
-            const chatWindow = document.getElementById('chatgpt-window');
-            const chatForm = document.getElementById('chatgpt-form');
-            const chatInput = document.getElementById('chatgpt-input');
-            const leadContext = `CONTEXT: You are an internal assistant for Kaagaz Mitra. You are helping with a lead. Name: ${lead.name}. Email: ${lead.email}. Message: "${lead.message}". Service: "${lead.service}".`;
-            let chatGptHistory = [{ role: 'system', content: leadContext }];
-            chatForm.addEventListener('submit', async e => {
-                e.preventDefault();
-                const userMessage = chatInput.value.trim();
-                if (!userMessage) return;
-                addMessageToChat('user', userMessage);
-                chatInput.value = '';
-                chatGptHistory.push({ role: 'user', content: userMessage });
-                try {
-                    const response = await fetch(CHATGPT_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: chatGptHistory }) });
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        throw new Error(`API Error: ${errorText || response.statusText}`);
-                    }
-                    const data = await response.json();
-                    const assistantMessage = data.message;
-                    addMessageToChat('assistant', assistantMessage);
-                    chatGptHistory.push({ role: 'assistant', content: assistantMessage });
-                } catch (error) { addMessageToChat('assistant', `Error: Could not get response. ${error.message}`); }
-            });
-        }
-
-        function addMessageToChat(role, text) {
-            const chatWindow = document.getElementById('chatgpt-window');
-            if(!chatWindow) return;
-            const bubble = document.createElement('div');
-            bubble.className = `ai-chat-bubble ${role}`;
-            bubble.textContent = text;
-            chatWindow.appendChild(bubble);
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-        }
-
-        function closeModal() { dom.leadModal.classList.add('hidden'); dom.leadModal.classList.remove('flex'); dom.modalContent.innerHTML = ''; }
-        
+        function setupChatGPTAssistant(lead) { const chatWindow = document.getElementById('chatgpt-window'); const chatForm = document.getElementById('chatgpt-form'); const chatInput = document.getElementById('chatgpt-input'); const leadContext = `CONTEXT: You are an internal assistant for Kaagaz Mitra. You are helping with a lead. Name: ${lead.name}. Email: ${lead.email}. Message: "${lead.message}". Service: "${lead.service}".`; let chatGptHistory = [{ role: 'system', content: leadContext }]; chatForm.addEventListener('submit', async e => { e.preventDefault(); const userMessage = chatInput.value.trim(); if (!userMessage) return; addMessageToChat('user', userMessage); chatInput.value = ''; chatGptHistory.push({ role: 'user', content: userMessage }); try { const response = await fetch(CHATGPT_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: chatGptHistory }) }); if (!response.ok) { const errorText = await response.text(); throw new Error(`API Error: ${errorText || response.statusText}`); } const data = await response.json(); const assistantMessage = data.message; addMessageToChat('assistant', assistantMessage); chatGptHistory.push({ role: 'assistant', content: assistantMessage }); } catch (error) { addMessageToChat('assistant', `Error: Could not get response. ${error.message}`); } }); }
+        function addMessageToChat(role, text) { const chatWindow = document.getElementById('chatgpt-window'); if(!chatWindow) return; const bubble = document.createElement('div'); bubble.className = `ai-chat-bubble ${role}`; bubble.textContent = text; chatWindow.appendChild(bubble); chatWindow.scrollTop = chatWindow.scrollHeight; }
+        function renderChatDashboard() { dom.mainContent.innerHTML = `<div class="grid grid-cols-12 gap-6 h-[calc(100vh-150px)]"><div class="col-span-3 bg-white p-4 rounded-lg shadow overflow-y-auto"><h3 class="text-xl font-bold mb-4">Team</h3><ul id="team-list" class="space-y-2"></ul></div><div class="col-span-9 bg-white rounded-lg shadow flex flex-col"><div id="chat-header" class="p-4 border-b font-bold text-lg">Select a conversation</div><div id="chat-messages" class="flex-grow p-4 space-y-4 overflow-y-auto"></div><div id="chat-input-container" class="p-4 border-t hidden"><form id="chat-form" class="flex space-x-2"><input type="text" id="chat-input" class="flex-grow p-2 border rounded-md" placeholder="Type a message..." autocomplete="off"><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Send</button></form></div></div></div>`; populateTeamList(); }
+        function populateTeamList() { const teamListEl = document.getElementById('team-list'); teamListEl.innerHTML = `<li><button data-chat-id="group" data-chat-name="Group Chat" class="w-full text-left p-2 rounded-md hover:bg-gray-100 flex items-center space-x-3"><i class="fas fa-users text-gray-600"></i><span>Group Chat</span></button></li>`; teamListEl.querySelector('button').addEventListener('click', (e) => openChat(e.currentTarget.dataset.chatId, e.currentTarget.dataset.chatName)); const statusRef = ref(rtdb, 'status'); onValue(statusRef, (snapshot) => { const statuses = snapshot.val() || {}; teamListEl.querySelectorAll('.team-member-item').forEach(item => item.remove()); teamMembers.filter(m => m.email !== currentUser.email).forEach(member => { const li = document.createElement('li'); li.className = 'team-member-item'; const memberStatus = Object.values(statuses).find(s => s.name === member.name); const isOnline = memberStatus && memberStatus.state === 'online'; li.innerHTML = `<button data-chat-id="${member.email}" data-chat-name="${member.name}" class="w-full text-left p-2 rounded-md hover:bg-gray-100 flex items-center space-x-3"><span class="online-indicator ${isOnline ? 'bg-green-500' : 'bg-gray-400'}"></span><span>${member.name}</span></button>`; teamListEl.appendChild(li); }); teamListEl.querySelectorAll('.team-member-item button').forEach(btn => { btn.addEventListener('click', (e) => openChat(e.currentTarget.dataset.chatId, e.currentTarget.dataset.chatName)); }); }); }
+        function openChat(chatId, chatName) { if (unsubscribeChatListener) unsubscribeChatListener(); document.getElementById('chat-header').textContent = chatName; document.getElementById('chat-input-container').classList.remove('hidden'); const messagesEl = document.getElementById('chat-messages'); messagesEl.innerHTML = ''; let chatQuery; if (chatId === 'group') { chatQuery = query(collection(db, 'chats', 'group_chat', 'messages'), orderBy('timestamp')); } else { const members = [currentUser.email, chatId].sort(); const privateChatId = members.join('_'); chatQuery = query(collection(db, 'chats', privateChatId, 'messages'), orderBy('timestamp')); } unsubscribeChatListener = onSnapshot(chatQuery, (snapshot) => { messagesEl.innerHTML = ''; snapshot.forEach(doc => { const msg = doc.data(); const msgEl = document.createElement('div'); const isSent = msg.senderEmail === currentUser.email; msgEl.className = `p-3 rounded-lg chat-message ${isSent ? 'sent' : 'received'}`; msgEl.innerHTML = `<div class="font-bold text-sm">${isSent ? 'You' : msg.senderName}</div><div>${msg.text}</div><div class="text-xs opacity-70 mt-1 text-right">${msg.timestamp ? msg.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>`; messagesEl.appendChild(msgEl); }); messagesEl.scrollTop = messagesEl.scrollHeight; }); const chatForm = document.getElementById('chat-form'); const newChatForm = chatForm.cloneNode(true); chatForm.parentNode.replaceChild(newChatForm, chatForm); newChatForm.addEventListener('submit', (e) => { e.preventDefault(); const input = newChatForm.querySelector('#chat-input'); if (input.value.trim()) { sendMessage(chatId, input.value.trim()); input.value = ''; } }); }
+        async function sendMessage(chatId, text) { let collectionPath; if (chatId === 'group') { collectionPath = collection(db, 'chats', 'group_chat', 'messages'); } else { const members = [currentUser.email, chatId].sort(); const privateChatId = members.join('_'); collectionPath = collection(db, 'chats', privateChatId, 'messages'); } await addDoc(collectionPath, { text, senderEmail: currentUser.email, senderName: currentUser.displayName, timestamp: serverTimestamp() }); }
+        function closeModal() { dom.modalBackdrop.classList.add('hidden'); dom.modalBackdrop.classList.remove('flex'); dom.modalContent.innerHTML = ''; }
         dom.closeModalButton.addEventListener('click', closeModal);
-        dom.leadModal.addEventListener('click', e => { if (e.target === dom.leadModal) closeModal(); });
+        dom.modalBackdrop.addEventListener('click', e => { if (e.target === dom.modalBackdrop) closeModal(); });
 
     </script>
 </body>
