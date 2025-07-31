@@ -29,6 +29,8 @@
         .ai-chat-bubble { max-width: 80%; padding: 0.5rem 0.75rem; border-radius: 0.5rem; margin-bottom: 0.5rem; }
         .ai-chat-bubble.user { background-color: #3b82f6; color: white; margin-left: auto; }
         .ai-chat-bubble.assistant { background-color: #e5e7eb; color: #1f2937; margin-right: auto; }
+        /* Make links in chat and announcements clickable */
+        .chat-message a, .announcement-content a { color: #2563eb; text-decoration: underline; }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -59,7 +61,13 @@
                         <a href="#" id="nav-admin" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hidden">Admin</a>
                     </div>
                 </div>
-                <div><span id="user-email" class="text-gray-600 mr-4"></span><button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-full transition hover:bg-red-600">Logout</button></div>
+                <div class="flex items-center">
+                    <button id="start-main-meet" class="bg-green-500 text-white px-4 py-2 rounded-md text-sm hover:bg-green-600 flex items-center mr-4">
+                        <i class="fas fa-video mr-2"></i> Start Meeting
+                    </button>
+                    <span id="user-email" class="text-gray-600 mr-4"></span>
+                    <button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-full transition hover:bg-red-600">Logout</button>
+                </div>
             </nav>
         </header>
         <main id="main-content" class="container p-6 mx-auto">
@@ -120,19 +128,30 @@
             navWorkspace: document.getElementById('nav-workspace'),
             navChat: document.getElementById('nav-chat'),
             navAdmin: document.getElementById('nav-admin'),
+            startMainMeetBtn: document.getElementById('start-main-meet'),
             modalBackdrop: document.getElementById('modal-backdrop'),
             closeModalButton: document.getElementById('close-modal-button'),
             modalContent: document.getElementById('modal-content')
         };
 
-        let allLeads = [], allTasks = [], currentUser = null;
-        let unsubscribeChatListener = null, unsubscribeLeadsListeners = [], unsubscribeTasksListener = null;
+        let allLeads = [], allTasks = [], allAnnouncements = [], currentUser = null;
+        let unsubscribeChatListener = null, unsubscribeLeadsListeners = [], unsubscribeTasksListener = null, unsubscribeAnnouncementsListener = null;
         
+        // --- Helper Function ---
+        function linkify(text) {
+            const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])|(\bwww\.[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            return text.replace(urlRegex, function(url) {
+                const link = url.startsWith('www.') ? 'http://' + url : url;
+                return `<a href="${link}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+            });
+        }
+
         // --- App Navigation & Auth ---
         dom.navLeads.addEventListener('click', (e) => { e.preventDefault(); navigate('leads'); });
         dom.navWorkspace.addEventListener('click', (e) => { e.preventDefault(); navigate('workspace'); });
         dom.navChat.addEventListener('click', (e) => { e.preventDefault(); navigate('chat'); });
         dom.navAdmin.addEventListener('click', (e) => { e.preventDefault(); navigate('admin'); });
+        dom.startMainMeetBtn.addEventListener('click', () => window.open('https://meet.new', '_blank'));
         
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -158,6 +177,7 @@
                 dom.crmSection.classList.add('hidden');
                 unsubscribeLeadsListeners.forEach(unsub => unsub());
                 if (unsubscribeTasksListener) unsubscribeTasksListener();
+                if (unsubscribeAnnouncementsListener) unsubscribeAnnouncementsListener();
                 unsubscribeLeadsListeners = [];
             }
         });
@@ -201,6 +221,7 @@
         function initializeCrm() {
             if (unsubscribeLeadsListeners.length === 0) fetchAllLeads();
             if (!unsubscribeTasksListener) fetchAllTasks();
+            if (!unsubscribeAnnouncementsListener) listenForAnnouncements();
             navigate('leads');
         }
 
@@ -217,6 +238,35 @@
             }); 
         }
 
+        // --- Announcements ---
+        function listenForAnnouncements() {
+            const q = query(collection(db, "announcements"), orderBy("createdAt", "desc"));
+            unsubscribeAnnouncementsListener = onSnapshot(q, (snapshot) => {
+                allAnnouncements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (document.getElementById('announcements-panel')) {
+                    renderAnnouncementsPanel();
+                }
+            });
+        }
+
+        function renderAnnouncementsPanel() {
+            const panel = document.getElementById('announcements-panel');
+            if (!panel) return;
+            panel.innerHTML = `
+                <h3 class="text-xl font-bold mb-4">Announcements</h3>
+                <div class="space-y-4">
+                    ${allAnnouncements.map(ann => `
+                        <div class="p-4 bg-white rounded-lg shadow-sm">
+                            <p class="text-gray-800 announcement-content">${linkify(ann.message)}</p>
+                            <p class="text-xs text-gray-500 mt-2">
+                                By ${ann.createdBy} on ${ann.createdAt ? ann.createdAt.toDate().toLocaleDateString() : '...'}
+                            </p>
+                        </div>
+                    `).join('') || '<p class="text-gray-500">No announcements yet.</p>'}
+                </div>
+            `;
+        }
+        
         // --- Admin Dashboard ---
         function renderAdminDashboard() {
             const openLeads = allLeads.filter(l => l.status === 'New' || l.status === 'In Progress').length;
@@ -230,38 +280,87 @@
                     <div class="p-6 bg-white rounded-lg shadow"><h4 class="text-gray-500">Total Tasks</h4><p id="total-tasks" class="text-3xl font-bold">${allTasks.length}</p></div>
                     <div class="p-6 bg-white rounded-lg shadow"><h4 class="text-gray-500">Open Tasks</h4><p id="open-tasks" class="text-3xl font-bold">${openTasks}</p></div>
                 </div>
-                <div class="p-6 bg-white rounded-lg shadow">
-                    <h3 class="text-xl font-bold mb-4">Team Management</h3>
-                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
-                        <p class="font-bold">How to Manage Users</p>
-                        <p>To add, remove, or reset passwords for team members, please use the <a href="https://console.firebase.google.com/" target="_blank" class="font-semibold underline">Firebase Authentication Console</a>. To grant or revoke admin privileges, use the one-time admin script.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="p-6 bg-white rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-4">Team Management</h3>
+                        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
+                            <p class="font-bold">How to Manage Users</p>
+                            <p>To add, remove, or reset passwords for team members, please use the <a href="https://console.firebase.google.com/" target="_blank" class="font-semibold underline">Firebase Authentication Console</a>. To grant or revoke admin privileges, use the one-time admin script.</p>
+                        </div>
+                        <ul id="team-list" class="space-y-2">
+                            ${teamMembers.map(m => `<li class="p-2 border rounded-md">${m.name} - ${m.email}</li>`).join('')}
+                        </ul>
                     </div>
-                    <ul id="team-list" class="space-y-2">
-                        ${teamMembers.map(m => `<li class="p-2 border rounded-md">${m.name} - ${m.email}</li>`).join('')}
-                    </ul>
+                    <div class="p-6 bg-white rounded-lg shadow">
+                        <h3 class="text-xl font-bold mb-4">Send Announcement</h3>
+                        <p class="text-sm text-gray-600 mb-4">This message will appear in the announcements panel for all team members.</p>
+                        <form id="announcement-form" class="space-y-4">
+                            <textarea id="announcement-message" rows="4" required class="w-full p-2 border rounded-md" placeholder="Type your announcement here..."></textarea>
+                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Post Announcement</button>
+                            <div id="announcement-status" class="text-sm"></div>
+                        </form>
+                    </div>
                 </div>
             `;
+
+            document.getElementById('announcement-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const messageInput = document.getElementById('announcement-message');
+                const text = messageInput.value.trim();
+                if (!text) return;
+
+                const submitButton = e.target.querySelector('button[type="submit"]');
+                const statusEl = document.getElementById('announcement-status');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Posting...';
+                statusEl.textContent = '';
+
+                try {
+                    await addDoc(collection(db, 'announcements'), {
+                        message: text,
+                        createdBy: currentUser.displayName || currentUser.email,
+                        createdAt: serverTimestamp()
+                    });
+                    statusEl.textContent = 'Announcement posted successfully!';
+                    statusEl.className = 'text-green-600';
+                    messageInput.value = '';
+                } catch (error) {
+                    console.error("Error posting announcement:", error);
+                    statusEl.textContent = 'Failed to post announcement.';
+                    statusEl.className = 'text-red-600';
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Post Announcement';
+                }
+            });
         }
 
         // --- Workspace Dashboard ---
         function renderWorkspaceDashboard() {
             dom.mainContent.innerHTML = `
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-3xl font-bold text-gray-800">Team Workspace</h2>
-                        <p class="text-gray-600">Manage tasks and view your team's calendar.</p>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-9">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h2 class="text-3xl font-bold text-gray-800">Team Workspace</h2>
+                                <p class="text-gray-600">Manage tasks and view your team's calendar.</p>
+                            </div>
+                            <button id="add-task-btn" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">
+                                <i class="fas fa-plus mr-2"></i> Add Task
+                            </button>
+                        </div>
+                        <div class="mb-4 border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-6" id="workspace-tabs">
+                                <button data-view="board" class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Task Board</button>
+                                <button data-view="calendar" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Calendar</button>
+                            </nav>
+                        </div>
+                        <div id="workspace-view"></div>
                     </div>
-                    <button id="add-task-btn" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">
-                        <i class="fas fa-plus mr-2"></i> Add Task
-                    </button>
+                    <div class="col-span-3" id="announcements-panel">
+                        <!-- Announcements will be rendered here -->
+                    </div>
                 </div>
-                <div class="mb-4 border-b border-gray-200">
-                    <nav class="-mb-px flex space-x-6" id="workspace-tabs">
-                        <button data-view="board" class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Task Board</button>
-                        <button data-view="calendar" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Calendar</button>
-                    </nav>
-                </div>
-                <div id="workspace-view"></div>
             `;
             
             document.getElementById('add-task-btn').addEventListener('click', () => openTaskModal());
@@ -274,6 +373,7 @@
                 });
             });
             renderTaskBoard();
+            renderAnnouncementsPanel();
         }
 
         function renderTaskBoard() {
@@ -432,18 +532,26 @@
         // --- Leads Dashboard ---
         function renderLeadsDashboard() {
             dom.mainContent.innerHTML = `
-                <div class="mb-6"><h2 class="text-3xl font-bold text-gray-800">Leads Dashboard</h2><p class="text-gray-600">Manage all your customer inquiries.</p></div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mb-6 bg-white rounded-lg shadow">
-                    <div class="flex-grow"><label for="category-filter" class="text-sm font-medium text-gray-700">Category:</label><select id="category-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"><option value="all">All</option><option value="studentInquiries">Students</option><option value="businessInquiries">Business</option><option value="individualInquiries">Individuals</option><option value="inquiries">General</option></select></div>
-                    <div class="flex-grow"><label for="assignee-filter" class="text-sm font-medium text-gray-700">Assignee:</label><select id="assignee-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></select></div>
-                    <div class="flex-grow"><label for="search-input" class="text-sm font-medium text-gray-700">Search:</label><input type="text" id="search-input" placeholder="Search..." class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></div>
+                <div class="grid grid-cols-12 gap-6">
+                    <div class="col-span-9">
+                        <div class="mb-6"><h2 class="text-3xl font-bold text-gray-800">Leads Dashboard</h2><p class="text-gray-600">Manage all your customer inquiries.</p></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mb-6 bg-white rounded-lg shadow">
+                            <div class="flex-grow"><label for="category-filter" class="text-sm font-medium text-gray-700">Category:</label><select id="category-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"><option value="all">All</option><option value="studentInquiries">Students</option><option value="businessInquiries">Business</option><option value="individualInquiries">Individuals</option><option value="inquiries">General</option></select></div>
+                            <div class="flex-grow"><label for="assignee-filter" class="text-sm font-medium text-gray-700">Assignee:</label><select id="assignee-filter" class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></select></div>
+                            <div class="flex-grow"><label for="search-input" class="text-sm font-medium text-gray-700">Search:</label><input type="text" id="search-input" placeholder="Search..." class="w-full p-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-500 focus:border-orange-500"></div>
+                        </div>
+                        <div id="kanban-board" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+                            <div id="new" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="New"><h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-200 pb-2 mb-4">New Leads</h3><div class="space-y-4 leads-container"></div></div>
+                            <div id="in-progress" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="In Progress"><h3 class="text-xl font-bold text-yellow-600 border-b-2 border-yellow-200 pb-2 mb-4">In Progress</h3><div class="space-y-4 leads-container"></div></div>
+                            <div id="completed" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Completed"><h3 class="text-xl font-bold text-green-600 border-b-2 border-green-200 pb-2 mb-4">Completed</h3><div class="space-y-4 leads-container"></div></div>
+                            <div id="canceled" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Canceled"><h3 class="text-xl font-bold text-red-600 border-b-2 border-red-200 pb-2 mb-4">Canceled</h3><div class="space-y-4 leads-container"></div></div>
+                        </div>
+                    </div>
+                    <div class="col-span-3" id="announcements-panel">
+                        <!-- Announcements will be rendered here -->
+                    </div>
                 </div>
-                <div id="kanban-board" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    <div id="new" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="New"><h3 class="text-xl font-bold text-blue-600 border-b-2 border-blue-200 pb-2 mb-4">New Leads</h3><div class="space-y-4 leads-container"></div></div>
-                    <div id="in-progress" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="In Progress"><h3 class="text-xl font-bold text-yellow-600 border-b-2 border-yellow-200 pb-2 mb-4">In Progress</h3><div class="space-y-4 leads-container"></div></div>
-                    <div id="completed" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Completed"><h3 class="text-xl font-bold text-green-600 border-b-2 border-green-200 pb-2 mb-4">Completed</h3><div class="space-y-4 leads-container"></div></div>
-                    <div id="canceled" class="p-4 bg-white rounded-lg shadow-lg kanban-column" data-status="Canceled"><h3 class="text-xl font-bold text-red-600 border-b-2 border-red-200 pb-2 mb-4">Canceled</h3><div class="space-y-4 leads-container"></div></div>
-                </div>`;
+            `;
             
             const assigneeFilter = document.getElementById('assignee-filter');
             assigneeFilter.innerHTML = '<option value="all">All Team Members</option>';
@@ -458,17 +566,18 @@
             assigneeFilter.addEventListener('change', () => filterAndRenderLeads());
             document.getElementById('search-input').addEventListener('input', () => filterAndRenderLeads());
             filterAndRenderLeads();
+            renderAnnouncementsPanel();
         }
 
         function getInitials(name = '') { if (!name || name === 'Unassigned') return 'U'; const parts = name.split(' '); return parts.length > 1 ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase() : name.substring(0, 2).toUpperCase(); }
         
         function fetchAllLeads() { const collections = ['studentInquiries', 'businessInquiries', 'individualInquiries', 'inquiries']; unsubscribeLeadsListeners.forEach(unsub => unsub()); unsubscribeLeadsListeners = []; collections.forEach(name => { const q = query(collection(db, name), orderBy("timestamp", "desc")); const unsubscribe = onSnapshot(q, snapshot => { allLeads = allLeads.filter(lead => lead.collectionName !== name); snapshot.forEach(doc => allLeads.push({ id: doc.id, collectionName: name, ...doc.data() })); if (dom.navLeads.classList.contains('active')) { filterAndRenderLeads(); } }, err => console.error(`Error fetching ${name}:`, err)); unsubscribeLeadsListeners.push(unsubscribe); }); }
-        function filterAndRenderLeads() { let leads = [...allLeads]; const categoryFilter = document.getElementById('category-filter'); const assigneeFilter = document.getElementById('assignee-filter'); const searchInput = document.getElementById('search-input'); if (categoryFilter && categoryFilter.value !== 'all') { leads = leads.filter(l => l.collectionName === categoryFilter.value); } if (assigneeFilter && assigneeFilter.value !== 'all') { leads = leads.filter(l => (l.assignedTo || 'unassigned') === assigneeFilter.value); } if (searchInput && searchInput.value) { const term = searchInput.value.toLowerCase(); leads = leads.filter(l => (l.name && l.name.toLowerCase().includes(term)) || (l.email && l.email.toLowerCase().includes(term))); } renderLeads(leads); }
+        function filterAndRenderLeads() { let leads = [...allLeads]; const categoryFilter = document.getElementById('category-filter'); const assigneeFilter = document.getElementById('assignee-filter'); const searchInput = document.getElementById('search-input'); if (categoryFilter && categoryFilter.value !== 'all') { leads = leads.filter(l => l.collectionName === categoryFilter.value); } if (assigneeFilter && assigneeFilter.value !== 'all') { leads = leads.filter(l => (l.assignedTo || 'unassigned') === assigneeFilter.value); } if (searchInput && searchInput.value) { const term = searchInput.value.toLowerCase(); leads = leads.filter(l => (l.name && l.name.toLowerCase().includes(term)) || (l.email && l.email.toLowerCase().includes(term))); } leads.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0)); renderLeads(leads); }
         function renderLeads(leads = []) { const leadsContainers = document.querySelectorAll('.leads-container'); if (!leadsContainers.length) return; leadsContainers.forEach(c => c.innerHTML = ''); leads.forEach(lead => { const status = lead.status || 'New'; const column = document.querySelector(`[data-status="${status}"] .leads-container`); if (column) column.appendChild(createLeadCard(lead)); }); setupDragAndDrop(); }
         function createLeadCard(lead) { const card = document.createElement('div'); card.className = 'p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm kanban-card hover:shadow-md hover:border-orange-300'; card.draggable = true; card.dataset.id = lead.id; card.dataset.collection = lead.collectionName; const categoryInfo = { studentInquiries: { name: 'Student', color: 'bg-blue-100 text-blue-800' }, businessInquiries: { name: 'Business', color: 'bg-green-100 text-green-800' }, individualInquiries: { name: 'Individual', color: 'bg-purple-100 text-purple-800' }, inquiries: { name: 'General', color: 'bg-gray-200 text-gray-800' } }; const cat = categoryInfo[lead.collectionName] || { name: 'Unknown', color: 'bg-gray-100' }; const assignee = teamMembers.find(m => m.email === (lead.assignedTo || 'unassigned')) || {name: 'Unassigned', email: 'unassigned'}; const assigneeInitials = getInitials(assignee.name); const assigneeColor = assignee.email === 'unassigned' ? 'bg-gray-400' : 'bg-indigo-500'; card.innerHTML = `<div class="flex justify-between items-start"><h4 class="font-bold text-gray-900">${lead.name || 'N/A'}</h4><span class="text-xs font-semibold px-2 py-1 rounded-full ${cat.color}">${cat.name}</span></div><p class="text-sm text-gray-600">${lead.email || 'No email'}</p><p class="mt-2 text-sm text-gray-500 truncate">${lead.service || lead.message}</p><div class="flex items-center justify-between mt-3"><div class="text-xs text-gray-400"><span>${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleDateString() : 'No date'}</span></div><div class="assignee-avatar ${assigneeColor}" title="Assigned to: ${assignee.name}">${assigneeInitials}</div></div>`; card.addEventListener('click', () => openLeadModal(lead)); return card; }
         function setupDragAndDrop() { const cards = document.querySelectorAll('#kanban-board .kanban-card'); const columns = document.querySelectorAll('#kanban-board .kanban-column'); let draggedCard = null; cards.forEach(card => { card.addEventListener('dragstart', () => { draggedCard = card; setTimeout(() => card.classList.add('dragging'), 0); }); card.addEventListener('dragend', () => { draggedCard.classList.remove('dragging'); draggedCard = null; }); }); columns.forEach(column => { column.addEventListener('dragover', e => { e.preventDefault(); }); column.addEventListener('drop', e => { e.preventDefault(); const container = column.querySelector('.leads-container'); container.appendChild(draggedCard); updateLeadField(draggedCard.dataset.collection, draggedCard.dataset.id, { status: column.dataset.status }); }); }); }
         async function updateLeadField(collectionName, leadId, dataToUpdate) { const leadRef = doc(db, collectionName, leadId); try { await updateDoc(leadRef, dataToUpdate); const leadIndex = allLeads.findIndex(l => l.id === leadId && l.collectionName === collectionName); if (leadIndex > -1) Object.assign(allLeads[leadIndex], dataToUpdate); filterAndRenderLeads(); } catch (error) { console.error("Error updating lead: ", error); filterAndRenderLeads(); } }
-        function openLeadModal(lead) { dom.modalContent.innerHTML = `<h3 class="text-2xl font-bold mb-4">${lead.name}</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="space-y-4 text-gray-700"><p><strong>Email:</strong> <a href="mailto:${lead.email}" class="text-blue-600 hover:underline">${lead.email}</a></p><p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p><p><strong>Category:</strong> ${lead.collectionName}</p><p><strong>Service of Interest:</strong> ${lead.service || 'N/A'}</p><p><strong>Submitted on:</strong> ${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</p><div class="p-3 bg-gray-50 rounded-md border"><p class="font-semibold">Message:</p><p>${lead.message || 'No message provided.'}</p></div><div><label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label><select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">${teamMembers.map(m => `<option value="${m.email}" ${(lead.assignedTo || 'unassigned') === m.email ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div></div><div><div class="border-b border-gray-200 mb-4"><nav class="-mb-px flex space-x-6" id="modal-tabs"></nav></div><div id="modal-tab-content"></div></div></div>`; setupModalTabs(lead); dom.modalBackdrop.classList.remove('hidden'); dom.modalBackdrop.classList.add('flex'); document.getElementById('assign-lead').addEventListener('change', e => updateLeadField(lead.collectionName, lead.id, { assignedTo: e.target.value })); }
+        function openLeadModal(lead) { dom.modalContent.innerHTML = `<h3 class="text-2xl font-bold mb-4">${lead.name}</h3><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="space-y-4 text-gray-700"><p><strong>Email:</strong> <a href="mailto:${lead.email}" class="text-blue-600 hover:underline">${lead.email}</a></p><p><strong>Phone:</strong> ${lead.phone || 'N/A'}</p><p><strong>Category:</strong> ${lead.collectionName}</p><p><strong>Service of Interest:</strong> ${lead.service || 'N/A'}</p><p><strong>Submitted on:</strong> ${lead.timestamp ? new Date(lead.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</p><div class="p-3 bg-gray-50 rounded-md border"><p class="font-semibold">Message:</p><p>${lead.message || 'No message provided.'}</p></div><div><label for="assign-lead" class="font-semibold text-gray-800">Assign To:</label><select id="assign-lead" class="w-full p-2 mt-1 border rounded-md bg-white focus:ring-orange-500 focus:border-orange-500">${teamMembers.map(m => `<option value="${m.email}" ${(lead.assignedTo || 'unassigned') === m.email ? 'selected' : ''}>${m.name}</option>`).join('')}</select></div><div class="mt-4"><button id="schedule-meet-btn" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 w-full flex items-center justify-center"><i class="fas fa-video mr-2"></i> Schedule Client Meeting</button></div></div><div><div class="border-b border-gray-200 mb-4"><nav class="-mb-px flex space-x-6" id="modal-tabs"></nav></div><div id="modal-tab-content"></div></div></div>`; setupModalTabs(lead); dom.modalBackdrop.classList.remove('hidden'); dom.modalBackdrop.classList.add('flex'); document.getElementById('assign-lead').addEventListener('change', e => updateLeadField(lead.collectionName, lead.id, { assignedTo: e.target.value })); document.getElementById('schedule-meet-btn').addEventListener('click', () => scheduleClientMeeting(lead)); }
         function setupModalTabs(lead) { const tabsContainer = document.getElementById('modal-tabs'); const tabContentContainer = document.getElementById('modal-tab-content'); const tabs = [{ name: 'Notes', content: getNotesContent() }, { name: 'Email Client', content: getEmailContent() }, { name: 'Team Assistant', content: getChatGPTContent() }]; tabsContainer.innerHTML = ''; tabs.forEach((tab, index) => { const button = document.createElement('button'); button.textContent = tab.name; button.className = `whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300 tab-button ${index === 0 ? 'active' : ''}`; button.addEventListener('click', () => { document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active')); button.classList.add('active'); tabContentContainer.innerHTML = tab.content; activateTabContent(tab.name, lead); }); tabsContainer.appendChild(button); }); tabContentContainer.innerHTML = tabs[0].content; activateTabContent(tabs[0].name, lead); }
         function activateTabContent(tabName, lead) { if (tabName === 'Notes') loadNotes(lead.collectionName, lead.id); if (tabName === 'Email Client') setupEmailAssistant(lead); if (tabName === 'Team Assistant') setupChatGPTAssistant(lead); }
         function getNotesContent() { return `<h4 class="font-bold text-lg mb-2">Notes</h4><div id="notes-container" class="space-y-2 mb-4 max-h-48 overflow-y-auto p-2 bg-gray-50 border rounded-md"></div><form id="add-note-form"><textarea id="note-input" rows="3" placeholder="Add a new note..." class="w-full p-2 border rounded-md focus:ring-orange-500 focus:border-orange-500"></textarea><button type="submit" class="mt-2 bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600">Add Note</button></form>`; }
@@ -479,13 +588,14 @@
         function getChatGPTContent() { return `<h4 class="font-bold text-lg mb-2">Internal Team Assistant</h4><div id="chatgpt-window" class="ai-chat-window mb-2"></div><form id="chatgpt-form" class="flex space-x-2"><input type="text" id="chatgpt-input" class="flex-grow p-2 border rounded-md" placeholder="Ask a question about this lead..."><button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">Send</button></form>`; }
         function setupChatGPTAssistant(lead) { const chatWindow = document.getElementById('chatgpt-window'); const chatForm = document.getElementById('chatgpt-form'); const chatInput = document.getElementById('chatgpt-input'); const leadContext = `CONTEXT: You are an internal assistant for Kaagaz Mitra. You are helping with a lead. Name: ${lead.name}. Email: ${lead.email}. Message: "${lead.message}". Service: "${lead.service}".`; let chatGptHistory = [{ role: 'system', content: leadContext }]; chatForm.addEventListener('submit', async e => { e.preventDefault(); const userMessage = chatInput.value.trim(); if (!userMessage) return; addMessageToChat('user', userMessage); chatInput.value = ''; chatGptHistory.push({ role: 'user', content: userMessage }); try { const response = await fetch(CHATGPT_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: chatGptHistory }) }); if (!response.ok) { const errorText = await response.text(); throw new Error(`API Error: ${errorText || response.statusText}`); } const data = await response.json(); const assistantMessage = data.message; addMessageToChat('assistant', assistantMessage); chatGptHistory.push({ role: 'assistant', content: assistantMessage }); } catch (error) { addMessageToChat('assistant', `Error: Could not get response. ${error.message}`); } }); }
         function addMessageToChat(role, text) { const chatWindow = document.getElementById('chatgpt-window'); if(!chatWindow) return; const bubble = document.createElement('div'); bubble.className = `ai-chat-bubble ${role}`; bubble.textContent = text; chatWindow.appendChild(bubble); chatWindow.scrollTop = chatWindow.scrollHeight; }
-        function renderChatDashboard() { dom.mainContent.innerHTML = `<div class="grid grid-cols-12 gap-6 h-[calc(100vh-150px)]"><div class="col-span-3 bg-white p-4 rounded-lg shadow overflow-y-auto"><h3 class="text-xl font-bold mb-4">Team</h3><ul id="team-list" class="space-y-2"></ul></div><div class="col-span-9 bg-white rounded-lg shadow flex flex-col"><div id="chat-header" class="p-4 border-b font-bold text-lg">Select a conversation</div><div id="chat-messages" class="flex-grow p-4 space-y-4 overflow-y-auto"></div><div id="chat-input-container" class="p-4 border-t hidden"><form id="chat-form" class="flex space-x-2"><input type="text" id="chat-input" class="flex-grow p-2 border rounded-md" placeholder="Type a message..." autocomplete="off"><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Send</button></form></div></div></div>`; populateTeamList(); }
+        function renderChatDashboard() { dom.mainContent.innerHTML = `<div class="grid grid-cols-12 gap-6 h-[calc(100vh-150px)]"><div class="col-span-3 bg-white p-4 rounded-lg shadow overflow-y-auto"><div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Team</h3></div><ul id="team-list" class="space-y-2"></ul></div><div class="col-span-9 bg-white rounded-lg shadow flex flex-col"><div id="chat-header" class="p-4 border-b font-bold text-lg">Select a conversation</div><div id="chat-messages" class="flex-grow p-4 space-y-4 overflow-y-auto"></div><div id="chat-input-container" class="p-4 border-t hidden"><form id="chat-form" class="flex space-x-2"><input type="text" id="chat-input" class="flex-grow p-2 border rounded-md" placeholder="Type a message..." autocomplete="off"><button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Send</button></form></div></div></div>`; populateTeamList(); }
         function populateTeamList() { const teamListEl = document.getElementById('team-list'); teamListEl.innerHTML = `<li><button data-chat-id="group" data-chat-name="Group Chat" class="w-full text-left p-2 rounded-md hover:bg-gray-100 flex items-center space-x-3"><i class="fas fa-users text-gray-600"></i><span>Group Chat</span></button></li>`; teamListEl.querySelector('button').addEventListener('click', (e) => openChat(e.currentTarget.dataset.chatId, e.currentTarget.dataset.chatName)); const statusRef = ref(rtdb, 'status'); onValue(statusRef, (snapshot) => { const statuses = snapshot.val() || {}; teamListEl.querySelectorAll('.team-member-item').forEach(item => item.remove()); teamMembers.filter(m => m.email !== currentUser.email).forEach(member => { const li = document.createElement('li'); li.className = 'team-member-item'; const memberStatus = Object.values(statuses).find(s => s.name === member.name); const isOnline = memberStatus && memberStatus.state === 'online'; li.innerHTML = `<button data-chat-id="${member.email}" data-chat-name="${member.name}" class="w-full text-left p-2 rounded-md hover:bg-gray-100 flex items-center space-x-3"><span class="online-indicator ${isOnline ? 'bg-green-500' : 'bg-gray-400'}"></span><span>${member.name}</span></button>`; teamListEl.appendChild(li); }); teamListEl.querySelectorAll('.team-member-item button').forEach(btn => { btn.addEventListener('click', (e) => openChat(e.currentTarget.dataset.chatId, e.currentTarget.dataset.chatName)); }); }); }
-        function openChat(chatId, chatName) { if (unsubscribeChatListener) unsubscribeChatListener(); document.getElementById('chat-header').textContent = chatName; document.getElementById('chat-input-container').classList.remove('hidden'); const messagesEl = document.getElementById('chat-messages'); messagesEl.innerHTML = ''; let chatQuery; if (chatId === 'group') { chatQuery = query(collection(db, 'chats', 'group_chat', 'messages'), orderBy('timestamp')); } else { const members = [currentUser.email, chatId].sort(); const privateChatId = members.join('_'); chatQuery = query(collection(db, 'chats', privateChatId, 'messages'), orderBy('timestamp')); } unsubscribeChatListener = onSnapshot(chatQuery, (snapshot) => { messagesEl.innerHTML = ''; snapshot.forEach(doc => { const msg = doc.data(); const msgEl = document.createElement('div'); const isSent = msg.senderEmail === currentUser.email; msgEl.className = `p-3 rounded-lg chat-message ${isSent ? 'sent' : 'received'}`; msgEl.innerHTML = `<div class="font-bold text-sm">${isSent ? 'You' : msg.senderName}</div><div>${msg.text}</div><div class="text-xs opacity-70 mt-1 text-right">${msg.timestamp ? msg.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>`; messagesEl.appendChild(msgEl); }); messagesEl.scrollTop = messagesEl.scrollHeight; }); const chatForm = document.getElementById('chat-form'); const newChatForm = chatForm.cloneNode(true); chatForm.parentNode.replaceChild(newChatForm, chatForm); newChatForm.addEventListener('submit', (e) => { e.preventDefault(); const input = newChatForm.querySelector('#chat-input'); if (input.value.trim()) { sendMessage(chatId, input.value.trim()); input.value = ''; } }); }
+        function openChat(chatId, chatName) { if (unsubscribeChatListener) unsubscribeChatListener(); document.getElementById('chat-header').textContent = chatName; document.getElementById('chat-input-container').classList.remove('hidden'); const messagesEl = document.getElementById('chat-messages'); messagesEl.innerHTML = ''; let chatQuery; if (chatId === 'group') { chatQuery = query(collection(db, 'chats', 'group_chat', 'messages'), orderBy('timestamp')); } else { const members = [currentUser.email, chatId].sort(); const privateChatId = members.join('_'); chatQuery = query(collection(db, 'chats', privateChatId, 'messages'), orderBy('timestamp')); } unsubscribeChatListener = onSnapshot(chatQuery, (snapshot) => { messagesEl.innerHTML = ''; snapshot.forEach(doc => { const msg = doc.data(); const msgEl = document.createElement('div'); const isSent = msg.senderEmail === currentUser.email; msgEl.className = `p-3 rounded-lg chat-message ${isSent ? 'sent' : 'received'}`; msgEl.innerHTML = `<div class="font-bold text-sm">${isSent ? 'You' : msg.senderName}</div><div>${linkify(msg.text)}</div><div class="text-xs opacity-70 mt-1 text-right">${msg.timestamp ? msg.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</div>`; messagesEl.appendChild(msgEl); }); messagesEl.scrollTop = messagesEl.scrollHeight; }); const chatForm = document.getElementById('chat-form'); const newChatForm = chatForm.cloneNode(true); chatForm.parentNode.replaceChild(newChatForm, chatForm); newChatForm.addEventListener('submit', (e) => { e.preventDefault(); const input = newChatForm.querySelector('#chat-input'); if (input.value.trim()) { sendMessage(chatId, input.value.trim()); input.value = ''; } }); }
         async function sendMessage(chatId, text) { let collectionPath; if (chatId === 'group') { collectionPath = collection(db, 'chats', 'group_chat', 'messages'); } else { const members = [currentUser.email, chatId].sort(); const privateChatId = members.join('_'); collectionPath = collection(db, 'chats', privateChatId, 'messages'); } await addDoc(collectionPath, { text, senderEmail: currentUser.email, senderName: currentUser.displayName, timestamp: serverTimestamp() }); }
         function closeModal() { dom.modalBackdrop.classList.add('hidden'); dom.modalBackdrop.classList.remove('flex'); dom.modalContent.innerHTML = ''; }
         dom.closeModalButton.addEventListener('click', closeModal);
         dom.modalBackdrop.addEventListener('click', e => { if (e.target === dom.modalBackdrop) closeModal(); });
+        function scheduleClientMeeting(lead) { const title = encodeURIComponent(`Meeting with ${lead.name}`); const details = encodeURIComponent(`Discussion regarding their inquiry for: ${lead.service}.\n\nInitial message: ${lead.message}`); const guest = encodeURIComponent(lead.email); const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&add=${guest}&conferenceDataVersion=1&cs=true`; window.open(url, '_blank'); }
 
     </script>
 </body>
