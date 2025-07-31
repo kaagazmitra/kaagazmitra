@@ -56,6 +56,7 @@
                         <a href="#" id="nav-leads" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Leads</a>
                         <a href="#" id="nav-workspace" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Workspace</a>
                         <a href="#" id="nav-chat" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Team Chat</a>
+                        <a href="#" id="nav-admin" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hidden">Admin</a>
                     </div>
                 </div>
                 <div><span id="user-email" class="text-gray-600 mr-4"></span><button id="logout-button" class="bg-red-500 text-white px-4 py-2 rounded-full transition hover:bg-red-600">Logout</button></div>
@@ -118,6 +119,7 @@
             navLeads: document.getElementById('nav-leads'),
             navWorkspace: document.getElementById('nav-workspace'),
             navChat: document.getElementById('nav-chat'),
+            navAdmin: document.getElementById('nav-admin'),
             modalBackdrop: document.getElementById('modal-backdrop'),
             closeModalButton: document.getElementById('close-modal-button'),
             modalContent: document.getElementById('modal-content')
@@ -130,12 +132,21 @@
         dom.navLeads.addEventListener('click', (e) => { e.preventDefault(); navigate('leads'); });
         dom.navWorkspace.addEventListener('click', (e) => { e.preventDefault(); navigate('workspace'); });
         dom.navChat.addEventListener('click', (e) => { e.preventDefault(); navigate('chat'); });
+        dom.navAdmin.addEventListener('click', (e) => { e.preventDefault(); navigate('admin'); });
         
-        onAuthStateChanged(auth, user => {
+        onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
                 const teamMember = teamMembers.find(m => m.email === user.email);
                 if (teamMember) currentUser.displayName = teamMember.name;
+                
+                const idTokenResult = await user.getIdTokenResult();
+                if (idTokenResult.claims.admin) {
+                    dom.navAdmin.classList.remove('hidden');
+                } else {
+                    dom.navAdmin.classList.add('hidden');
+                }
+
                 dom.authSection.classList.add('hidden');
                 dom.crmSection.classList.remove('hidden');
                 dom.userEmail.textContent = user.email;
@@ -152,7 +163,7 @@
         });
 
         function navigate(page) {
-            ['nav-leads', 'nav-workspace', 'nav-chat'].forEach(id => document.getElementById(id).classList.remove('active'));
+            ['nav-leads', 'nav-workspace', 'nav-chat', 'nav-admin'].forEach(id => document.getElementById(id).classList.remove('active'));
             if (unsubscribeChatListener) unsubscribeChatListener();
             
             if (page === 'leads') {
@@ -164,6 +175,9 @@
             } else if (page === 'chat') {
                 dom.navChat.classList.add('active');
                 renderChatDashboard();
+            } else if (page === 'admin') {
+                dom.navAdmin.classList.add('active');
+                renderAdminDashboard();
             }
         }
         
@@ -201,6 +215,32 @@
                     set(userStatusRef, isOnline); 
                 }); 
             }); 
+        }
+
+        // --- Admin Dashboard ---
+        function renderAdminDashboard() {
+            const openLeads = allLeads.filter(l => l.status === 'New' || l.status === 'In Progress').length;
+            const openTasks = allTasks.filter(t => t.status === 'To Do' || t.status === 'In Progress').length;
+
+            dom.mainContent.innerHTML = `
+                <div class="mb-6"><h2 class="text-3xl font-bold text-gray-800">Admin Panel</h2><p class="text-gray-600">Manage your team and view analytics.</p></div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="p-6 bg-white rounded-lg shadow"><h4 class="text-gray-500">Total Leads</h4><p id="total-leads" class="text-3xl font-bold">${allLeads.length}</p></div>
+                    <div class="p-6 bg-white rounded-lg shadow"><h4 class="text-gray-500">Open Leads</h4><p id="open-leads" class="text-3xl font-bold">${openLeads}</p></div>
+                    <div class="p-6 bg-white rounded-lg shadow"><h4 class="text-gray-500">Total Tasks</h4><p id="total-tasks" class="text-3xl font-bold">${allTasks.length}</p></div>
+                    <div class="p-6 bg-white rounded-lg shadow"><h4 class="text-gray-500">Open Tasks</h4><p id="open-tasks" class="text-3xl font-bold">${openTasks}</p></div>
+                </div>
+                <div class="p-6 bg-white rounded-lg shadow">
+                    <h3 class="text-xl font-bold mb-4">Team Management</h3>
+                    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 mb-4" role="alert">
+                        <p class="font-bold">How to Manage Users</p>
+                        <p>To add, remove, or reset passwords for team members, please use the <a href="https://console.firebase.google.com/" target="_blank" class="font-semibold underline">Firebase Authentication Console</a>. To grant or revoke admin privileges, use the one-time admin script.</p>
+                    </div>
+                    <ul id="team-list" class="space-y-2">
+                        ${teamMembers.map(m => `<li class="p-2 border rounded-md">${m.name} - ${m.email}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
         }
 
         // --- Workspace Dashboard ---
