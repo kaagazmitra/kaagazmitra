@@ -531,6 +531,15 @@
                     } else {
                         await addDoc(collection(db, "tasks"), { ...taskData, status: 'To Do', createdAt: serverTimestamp(), createdBy: currentUser.email });
                     }
+                    
+                    // Send notification email
+                    const assignee = teamMembers.find(m => m.email === taskData.assigneeEmail);
+                    if (assignee) {
+                        const subject = `New Task Assigned: ${taskData.title}`;
+                        const body = `<p>Hi ${assignee.name},</p><p>A new task has been assigned to you in the Kaagaz Mitra Workspace:</p><br><p><b>Title:</b> ${taskData.title}</p><p><b>Description:</b> ${taskData.description}</p><p><b>Due Date:</b> ${taskData.dueDate ? taskData.dueDate.toLocaleDateString() : 'Not set'}</p><br><p>Please log in to the workspace to view the task.</p><p>Thanks,<br>Kaagaz Mitra Admin</p>`;
+                        fetch(EMAIL_PROXY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: taskData.assigneeEmail, from: FROM_EMAIL_ADDRESS, subject: subject, body: body }) });
+                    }
+
                     closeModal();
                 } catch (error) {
                     console.error("Error saving task:", error);
