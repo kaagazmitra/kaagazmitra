@@ -1,19 +1,22 @@
-// Service Worker with pre-caching and offline fallback
+// KaagazMitra PWA Service Worker
+// Combined offline experience: Offline page + cached pages
 
 const CACHE = "pwabuilder-offline-page";
 const offlineFallbackPage = "offline.html";
 
-// List of pages to pre-cache
+// Pages to pre-cache
 const pagesToCache = [
   "/",
   "/index.html",
   offlineFallbackPage
 ];
 
-// Install event - cache offline page and homepage
+// Install event - cache homepage and offline.html
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(pagesToCache))
+    caches.open(CACHE).then((cache) => {
+      return cache.addAll(pagesToCache);
+    })
   );
   self.skipWaiting();
 });
@@ -23,13 +26,13 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(self.clients.claim());
 });
 
-// Enable navigation preload if supported
+// Enable Workbox navigation preload
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
 }
 
-// Cache strategies for all requests
+// Cache strategy for all requests
 workbox.routing.registerRoute(
   new RegExp('/*'),
   new workbox.strategies.StaleWhileRevalidate({
@@ -37,20 +40,29 @@ workbox.routing.registerRoute(
   })
 );
 
-// Fetch event - handle offline fallback
+// Fetch event - serve cached pages or offline.html
 self.addEventListener("fetch", (event) => {
+  // Only handle page navigations
   if (event.request.mode === "navigate") {
     event.respondWith((async () => {
       try {
+        // Try navigation preload response first
         const preloadResp = await event.preloadResponse;
         if (preloadResp) return preloadResp;
 
+        // Try network
         const networkResp = await fetch(event.request);
         return networkResp;
       } catch (error) {
+        // If network fails, check cache
         const cache = await caches.open(CACHE);
-        // Return cached page if available, otherwise offline.html
-        const cachedResp = await cache.match(event.request) || await cache.match(offlineFallbackPage);
+        let cachedResp = await cache.match(event.request);
+
+        // If not cached, serve offline.html
+        if (!cachedResp) {
+          cachedResp = await cache.match(offlineFallbackPage);
+        }
+
         return cachedResp;
       }
     })());
