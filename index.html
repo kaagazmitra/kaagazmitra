@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaagaz Mitra – Your Personal Digital Saathi</title>
-    
+    <!-- PWA Manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Theme color -->
+<meta name="theme-color" content="#ff6600">
+
+<!-- iOS Support -->
+<link rel="apple-touch-icon" sizes="180x180" href="/ios/180.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/ios/152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/ios/120.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<!-- Windows Tiles -->
+<meta name="msapplication-TileColor" content="#ff6600">
+<meta name="msapplication-TileImage" content="/windows11/Square150x150Logo.scale-400.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -559,5 +575,22 @@
             }
         });
     </script>
+    <body>
+  <!-- Your website content here -->
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => console.log('Service Worker registered successfully:', reg))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+  </script>
 </body>
 </html>
+
+</body>
+</html>
+
