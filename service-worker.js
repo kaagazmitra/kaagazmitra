@@ -1,29 +1,35 @@
-// This is the service worker with the combined offline experience (Offline page + Offline copy of pages)
+// Service Worker with pre-caching and offline fallback
 
 const CACHE = "pwabuilder-offline-page";
-
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
-
-// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
 const offlineFallbackPage = "offline.html";
 
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
-});
+// List of pages to pre-cache
+const pagesToCache = [
+  "/",
+  "/index.html",
+  offlineFallbackPage
+];
 
-self.addEventListener('install', async (event) => {
+// Install event - cache offline page and homepage
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE)
-      .then((cache) => cache.add(offlineFallbackPage))
+    caches.open(CACHE).then((cache) => cache.addAll(pagesToCache))
   );
+  self.skipWaiting();
 });
 
+// Activate event - take control immediately
+self.addEventListener("activate", (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
+// Enable navigation preload if supported
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
 if (workbox.navigationPreload.isSupported()) {
   workbox.navigationPreload.enable();
 }
 
+// Cache strategies for all requests
 workbox.routing.registerRoute(
   new RegExp('/*'),
   new workbox.strategies.StaleWhileRevalidate({
@@ -31,22 +37,20 @@ workbox.routing.registerRoute(
   })
 );
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
+// Fetch event - handle offline fallback
+self.addEventListener("fetch", (event) => {
+  if (event.request.mode === "navigate") {
     event.respondWith((async () => {
       try {
         const preloadResp = await event.preloadResponse;
-
-        if (preloadResp) {
-          return preloadResp;
-        }
+        if (preloadResp) return preloadResp;
 
         const networkResp = await fetch(event.request);
         return networkResp;
       } catch (error) {
-
         const cache = await caches.open(CACHE);
-        const cachedResp = await cache.match(offlineFallbackPage);
+        // Return cached page if available, otherwise offline.html
+        const cachedResp = await cache.match(event.request) || await cache.match(offlineFallbackPage);
         return cachedResp;
       }
     })());
