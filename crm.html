@@ -64,6 +64,7 @@
                         <a href="#" id="nav-leads" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Leads</a>
                         <a href="#" id="nav-workspace" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Workspace</a>
                         <a href="#" id="nav-chat" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">Team Chat</a>
+                        <a href="http://gst.kaagazmitra.com" target="_blank" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100">GST Tool</a>
                         <a href="#" id="nav-admin" class="main-nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 hidden">Admin</a>
                     </div>
                 </div>
@@ -175,8 +176,8 @@
                 dom.authSection.classList.add('hidden');
                 dom.crmSection.classList.remove('hidden');
                 dom.userEmail.textContent = user.email;
-                setupPresence();
-                initializeCrm();
+                
+                initializeApplication();
             } else {
                 currentUser = null;
                 dom.authSection.classList.remove('hidden');
@@ -224,11 +225,12 @@
              signOut(auth);
         });
 
-        function initializeCrm() {
-            navigate('leads'); // Render UI first to prevent race conditions
+        function initializeApplication() {
+            setupPresence();
             if (unsubscribeLeadsListeners.length === 0) fetchAllLeads();
             if (!unsubscribeTasksListener) fetchAllTasks();
             if (!unsubscribeAnnouncementsListener) listenForAnnouncements();
+            navigate('leads');
         }
 
         function setupPresence() { 
@@ -628,4 +630,3 @@
     </script>
 </body>
 </html>
-
