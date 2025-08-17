@@ -225,10 +225,10 @@
         });
 
         function initializeCrm() {
+            navigate('leads'); // Render UI first to prevent race conditions
             if (unsubscribeLeadsListeners.length === 0) fetchAllLeads();
             if (!unsubscribeTasksListener) fetchAllTasks();
             if (!unsubscribeAnnouncementsListener) listenForAnnouncements();
-            navigate('leads');
         }
 
         function setupPresence() { 
@@ -628,3 +628,4 @@
     </script>
 </body>
 </html>
+
