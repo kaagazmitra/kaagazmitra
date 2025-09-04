@@ -435,10 +435,12 @@
     </a>
 
     <script type="module">
+        // This script handles the contact form submission with Firebase.
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
+            // Your firebase config details
             apiKey: "AIzaSyAE7jq0NVBUdowEmHhyX-mShBhAwuA3aqA",
             authDomain: "kaagazmitra-9b2aa.firebaseapp.com",
             projectId: "kaagazmitra-9b2aa",
@@ -460,10 +462,12 @@
             const service = contactForm.service.value;
             const message = contactForm.message.value;
             const submitButton = contactForm.querySelector('button[type="submit"]');
+            
             submitButton.disabled = true;
             submitButton.textContent = 'Sending...';
+
             try {
-                const docRef = await addDoc(collection(db, "inquiries"), {
+                await addDoc(collection(db, "inquiries"), {
                     name, email, service, message, timestamp: new Date()
                 });
                 formStatus.textContent = 'Thank you! Your message has been sent successfully.';
@@ -471,6 +475,7 @@
                 formStatus.style.display = 'block';
                 contactForm.reset();
             } catch (error) {
+                console.error("Error adding document: ", error);
                 formStatus.textContent = 'Sorry, there was an error sending your message. Please try again later.';
                 formStatus.className = 'error';
                 formStatus.style.display = 'block';
@@ -482,37 +487,46 @@
     </script>
     
     <script>
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
-        });
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetElement = document.querySelector(this.getAttribute('href'));
-                if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Team Photo Slider Logic
+        // This script handles interactive elements like the mobile menu and sliders.
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Mobile Menu Logic ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            // Close mobile menu when a link is clicked
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+            });
+            
+            // --- Smooth Scrolling for Anchor Links ---
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // --- Team Photo Slider Logic ---
             const slider = document.getElementById('team-slider');
             const prevButton = document.getElementById('prev-button');
             const nextButton = document.getElementById('next-button');
             
-            if (slider) {
+            if (slider && prevButton && nextButton) {
                 const slides = slider.children.length;
                 let currentIndex = 0;
                 let autoSlideInterval;
 
                 function goToSlide(index) {
-                    slider.style.transform = translateX(-${index * 100}%);
+                    // FIX: Used template literal (backticks ``) for correct string interpolation.
+                    slider.style.transform = `translateX(-${index * 100}%)`;
                     currentIndex = index;
                 }
 
@@ -548,19 +562,15 @@
                 startAutoSlide();
             }
         });
-    </script>
-    <body>
-  <!-- Your website content here -->
 
-  <!-- Service Worker Registration -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => console.log('Service Worker registered successfully:', reg))
-          .catch(err => console.log('Service Worker registration failed:', err));
-      });
-    }
-  </script>
+        // --- Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+              .then(reg => console.log('Service Worker registered successfully:', reg))
+              .catch(err => console.log('Service Worker registration failed:', err));
+          });
+        }
+    </script>
 </body>
 </html>
