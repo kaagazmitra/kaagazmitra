@@ -1,154 +1,208 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
-<url>
-  <loc>https://www.kaagazmitra.com/index.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/blog.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.90</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/students.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/business.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/individuals.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/careers.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/privacy.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.50</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/partnership-deed-guide.html</loc>
-  <lastmod>2025-08-10T10:20:00+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/stress-free-itr-filing.html</loc>
-  <lastmod>2025-08-09T16:09:00+00:00</lastmod>
-  <priority>0.70</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-1.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-2.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-3.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-4.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-5.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-6.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-7.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-8.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-9.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-10.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-11.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-12.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-13.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-14.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-15.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-16.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-17.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-18.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-19.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-<url>
-  <loc>https://www.kaagazmitra.com/article-20.html</loc>
-  <lastmod>2025-07-08T16:09:00+00:00</lastmod>
-  <priority>0.60</priority>
-</url>
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.kaagazmitra.com/index.html</loc>
+    <lastmod>2025-09-09</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/blog.html</loc>
+    <lastmod>2025-09-09</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/us-visa-passport-guide.html</loc>
+    <lastmod>2025-09-09</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/careers.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/privacy.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/business.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/business-setup.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/gst-registration.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/gst-filing.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/fssai-license.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/itr-filing.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/insurance-services.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/digital-marketing.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/website-development.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/social-media-management.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/lead-generation.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/digital-marketing-campaigns.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/seo-content-optimization.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/operations-staffing.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/worker-provision.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/operational-support.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/sim-card-activations.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/general-admin-assistance.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/background-checks.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/temporary-permanent-staffing.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/payroll-management.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/hr-admin-support.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/students.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/college-admission-forms.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/scholarship-forms.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/resume-building.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/internship-job-seeking.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/marksheet-certificate-assistance.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/free-certificates.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/individuals.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/pan-card-application.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/aadhaar-card-updates.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/ayushman-card-application.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/fssai-home-business.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/vehicle-services.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/passport-application.html</loc>
+    <lastmod>2025-07-25</lastmod>
+    <priority>0.70</priority>
+  </url>
 </urlset>
