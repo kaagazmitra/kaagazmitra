@@ -2,17 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.kaagazmitra.com/index.html</loc>
-    <lastmod>2025-09-09</lastmod>
+    <lastmod>2025-09-11</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://www.kaagazmitra.com/blog.html</loc>
-    <lastmod>2025-09-09</lastmod>
+    <lastmod>2025-09-11</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://www.kaagazmitra.com/us-visa-passport-guide.html</loc>
-    <lastmod>2025-09-09</lastmod>
+    <lastmod>2025-09-11</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://www.kaagazmitra.com/dubai-uae-visa-guide-for-indians.html</loc>
+    <lastmod>2025-09-11</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
@@ -206,3 +211,4 @@
     <priority>0.70</priority>
   </url>
 </urlset>
+
