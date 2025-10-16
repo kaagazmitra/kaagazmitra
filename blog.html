@@ -20,16 +20,9 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon">
 
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .blog-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .blog-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .blog-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .blog-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -57,6 +50,28 @@
             <div class="container mx-auto px-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
 
+                    <!-- NEW: Attend Mitra Article -->
+                    <div class="blog-card bg-white rounded-lg shadow-md overflow-hidden">
+                        <a href="./Article23.html">
+                            <img src="./images/Attendmitra-HR.png" alt="Attend Mitra HR dashboard for attendance and payroll SaaS" class="w-full h-56 object-cover">
+                        </a>
+                        <div class="p-6">
+                            <span class="text-sm font-semibold text-emerald-600">HR Tech &amp; SaaS</span>
+                            <h2 class="text-2xl font-bold text-gray-800 mt-2 mb-3">
+                                <a href="./Article23.html" class="hover:text-orange-500 transition">
+                                    Attend Mitra Review 2025: Next-Gen Attendance &amp; Payroll SaaS
+                                </a>
+                            </h2>
+                            <p class="text-gray-600 mb-4">
+                                Discover how Attend Mitra simplifies HR, real-time attendance, and automated payroll with AI—“Attendance. Anytime. Anywhere.”
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                <time datetime="2025-10-16">October 16, 2025</time>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- New PTE vs IELTS Article -->
                     <div class="blog-card bg-white rounded-lg shadow-md overflow-hidden">
                         <a href="./pte-vs-ielts-guide.html"><img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="A student looking thoughtfully at a laptop, weighing the options between PTE and IELTS." class="w-full h-56 object-cover"></a>
@@ -79,7 +94,7 @@
                         </div>
                     </div>
 
-                     <!-- Travel Insurance Article -->
+                    <!-- Travel Insurance Article -->
                     <div class="blog-card bg-white rounded-lg shadow-md overflow-hidden">
                         <a href="./travel-insurance-guide.html"><img src="./images/travel-insurance-guide.jpg" alt="A traveler's backpack with a passport, map, and first-aid kit." class="w-full h-56 object-cover"></a>
                         <div class="p-6">
@@ -228,5 +243,3 @@
 
 </body>
 </html>
-
-
